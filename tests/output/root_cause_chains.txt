@@ -1,0 +1,30 @@
+================================================================================
+ROOT CAUSE CHAIN ANALYSIS
+================================================================================
+
+
+[CHAIN 1] Stage 35: join
+--------------------------------------------------------------------------------
+Primary Symptom: STAGE_FAILURE [CRITICAL]
+Description: Stage failed: FetchFailedException (executor lost due to OOM)
+
+Probable Cause Chain:
+  ├─> Stage 35 failed
+    └─> ROOT CAUSE: Unknown - Review stage logs for details
+        • recommendation: Check application logs and Spark UI
+
+Correlated Metrics at Failure:
+  • GC Overhead %: 4.0%
+  • Task Skew Ratio: 0.00
+  • Memory Spilled: 1.00 GB
+  • Shuffle Read: 0 B
+  • Total Duration: 10.0s
+  • Task Count: 1
+  • Mean Task Duration: 10000ms
+  • Max Task Duration: 10000ms
+  • GC vs Duration Correlation: 1.000
+  • Spill vs GC Correlation: 1.000
+
+Chain Confidence: 95%
+
+================================================================================

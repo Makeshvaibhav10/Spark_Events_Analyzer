@@ -1,0 +1,349 @@
+{
+  "report_metadata": {
+    "generated_at": "2025-11-01T22:23:28.290193",
+    "report_version": "2.0",
+    "analysis_engine": "Spark Event Analyzer - Phase 2",
+    "analyzer_capabilities": [
+      "Bottleneck Detection",
+      "Root Cause Analysis",
+      "Failure Detection",
+      "Correlation Analysis",
+      "Dynamic Thresholding"
+    ]
+  },
+  "executive_summary": {
+    "health_score": 35,
+    "health_status": "CRITICAL",
+    "total_bottlenecks": 4,
+    "critical_bottlenecks": 1,
+    "high_priority_bottlenecks": 3,
+    "total_anomalies": 1,
+    "requires_immediate_action": true,
+    "primary_concerns": [
+      "Memory Spill to Disk [CRITICAL]",
+      "GC Overhead / Memory Pressure [HIGH]",
+      "Data Skew / Partition Imbalance [HIGH]"
+    ],
+    "total_failures": 2,
+    "has_oom_events": false
+  },
+  "performance_metrics": {
+    "global": {
+      "total_jobs": 4,
+      "total_stages": 4,
+      "total_tasks": 4,
+      "application_duration": "2m 0s",
+      "application_duration_ms": 120000
+    },
+    "task_metrics": {
+      "total_tasks": 4,
+      "mean_duration_ms": 18250.0,
+      "median_duration_ms": 18000.0,
+      "std_duration_ms": 16660.83,
+      "skew_ratio": 0.913,
+      "coefficient_of_variation": 0.913,
+      "percentiles": {
+        "p25": 5000.0,
+        "p50": 18000.0,
+        "p75": 31250.0,
+        "p90": 33500.0,
+        "p95": 34250.0,
+        "p99": 34850.0
+      },
+      "stragglers": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "cpu_metrics": {
+      "efficiency": 0.36,
+      "efficiency_percentage": "36.03%",
+      "wait_percentage": "63.97%",
+      "deserialize_overhead_percentage": "0.00%"
+    },
+    "memory_metrics": {
+      "gc_overhead_ratio": 0.242,
+      "gc_overhead_percentage": "24.18%",
+      "gc_pressure_level": "HIGH",
+      "memory_bytes_spilled": 1637456281,
+      "memory_spilled_formatted": "1.52 GB",
+      "disk_bytes_spilled": 1342177280,
+      "total_spilled_formatted": "2.77 GB",
+      "tasks_with_spill": 3
+    },
+    "io_metrics": {
+      "input_bytes": 2281701376,
+      "input_formatted": "2.12 GB",
+      "output_bytes": 10485760,
+      "output_formatted": "10.00 MB",
+      "input_records": 0
+    },
+    "shuffle_metrics": {
+      "shuffle_read_bytes": 0,
+      "shuffle_read_formatted": "0.00 B",
+      "shuffle_write_bytes": 0,
+      "shuffle_write_formatted": "0.00 B",
+      "total_shuffle_formatted": "0.00 B",
+      "shuffle_time_ms": 0,
+      "shuffle_ratio": 0.0,
+      "shuffle_ratio_percentage": "0.00%",
+      "shuffle_efficiency": 1.0
+    },
+    "executor_metrics": {
+      "total_executors": 4,
+      "imbalance_ratio": 0.0,
+      "load_imbalance_percentage": 0.0,
+      "min_tasks_per_executor": 1,
+      "max_tasks_per_executor": 1,
+      "mean_tasks_per_executor": 1.0
+    },
+    "correlations": {
+      "gc_vs_duration": 0.9679370769582507,
+      "spill_vs_gc": 0.9903309073291183,
+      "shuffle_vs_duration": 0.0,
+      "cpu_vs_duration": 0.9590294030116305
+    }
+  },
+  "bottlenecks": [
+    {
+      "bottleneck": "Memory Spill to Disk",
+      "type": "MEMORY",
+      "severity": "CRITICAL",
+      "confidence": 1.0,
+      "impact_score": 1.0,
+      "metric_evidence": {
+        "memoryBytesSpilled": 1637456281,
+        "memory_spilled_formatted": "1.52 GB",
+        "diskBytesSpilled": 1342177280,
+        "disk_spilled_formatted": "1.25 GB",
+        "spill_ratio": 0.7176470585605678,
+        "spill_percentage": "71.76%",
+        "tasks_with_spill": 3
+      },
+      "reasoning": "Probable Cause: Insufficient executor memory causing data spill. Supporting Evidence: 1.52 GB spilled to memory, 1.25 GB spilled to disk (71.8% of input data). Indicates memory pressure requiring increased executor memory allocation.",
+      "impact": "1.52 GB spilled to disk (71.8% of input data)"
+    },
+    {
+      "bottleneck": "GC Overhead / Memory Pressure",
+      "type": "MEMORY",
+      "severity": "HIGH",
+      "confidence": 0.9423887204803383,
+      "impact_score": 0.48356164383561645,
+      "metric_evidence": {
+        "gc_overhead_ratio": 0.24178082191780823,
+        "gc_overhead_percentage": "24.18%",
+        "memoryBytesSpilled": 1637456281,
+        "memory_spilled_formatted": "1.52 GB",
+        "gc_pressure_level": "HIGH",
+        "total_gc_time_ms": 17650
+      },
+      "correlation_evidence": {
+        "spill_vs_gc_correlation": 0.9903309073291183,
+        "correlation_strength": "STRONG"
+      },
+      "reasoning": "Probable Cause: Memory pressure due to high garbage collection overhead. Supporting Evidence: GC consumes 24.2% of executor runtime, 1.52 GB spilled to disk (strong correlation: 0.99). Confidence based on GC impact severity and correlation with memory metrics.",
+      "impact": "GC consumes 24.2% of executor runtime, causing performance degradation"
+    },
+    {
+      "bottleneck": "Data Skew / Partition Imbalance",
+      "type": "DATA_SKEW",
+      "severity": "HIGH",
+      "confidence": 0.9031630678362617,
+      "impact_score": 0.9129223184735645,
+      "metric_evidence": {
+        "task_skew_ratio": 0.9129223184735645,
+        "coefficient_of_variation": 0.9129223184735645,
+        "stragglers_count": 0,
+        "stragglers_percentage": 0.0,
+        "min_duration_ms": 2000.0,
+        "median_duration_ms": 18000.0,
+        "max_duration_ms": 35000.0,
+        "p99_duration_ms": 34850.0
+      },
+      "reasoning": "Probable Cause: Data skew causing uneven partition distribution. Supporting Evidence: Task duration variance is 91.3% of mean, 0.0% of tasks are stragglers. P99 task is 1.9x slower than median. Indicates severe partition imbalance requiring repartitioning.",
+      "impact": "Task duration variance is 91.3% of mean, with 0.0% straggler tasks"
+    },
+    {
+      "bottleneck": "CPU Underutilization / CPU Underutilization",
+      "type": "CPU",
+      "severity": "HIGH",
+      "confidence": 0.79632409989768,
+      "impact_score": 0.6397260273972603,
+      "metric_evidence": {
+        "cpu_efficiency": 0.36027397260273974,
+        "cpu_utilization_percentage": "36.03%",
+        "cpu_wait_percentage": "63.97%",
+        "shuffle_ratio": 0.0,
+        "deserialize_overhead_percentage": 0.0
+      },
+      "correlation_evidence": {
+        "is_io_bottleneck": false,
+        "shuffle_correlation": "LOW"
+      },
+      "reasoning": "Probable Cause: CPU underutilization with 64.0% CPU idle time. Supporting Evidence: CPU efficiency is 36.0%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient parallelism.",
+      "impact": "CPUs are 64.0% idle, indicating inefficient resource utilization"
+    }
+  ],
+  "anomalies": [
+    {
+      "type": "STAGE_FAILURES",
+      "severity": "CRITICAL",
+      "count": 2,
+      "failure_rate": 0.5,
+      "description": "2 stage(s) failed (50.0% failure rate)"
+    }
+  ],
+  "warnings": [],
+  "failures": {
+    "stage_failures": [
+      {
+        "stage_id": 2,
+        "stage_attempt": 0,
+        "failure_type": "FetchFailed",
+        "failure_reason": "org.apache.spark.shuffle.FetchFailedException: Failed to connect to executor 3 due to data skew",
+        "timestamp": 1730364053000,
+        "metrics_at_failure": {
+          "stage_id": 2,
+          "stage_attempt": 0,
+          "task_count": 1,
+          "failed": true,
+          "failure_reason": "org.apache.spark.shuffle.FetchFailedException: Failed to connect to executor 3 due to data skew",
+          "mean_task_duration": 30000.0,
+          "max_task_duration": 30000.0,
+          "task_skew": NaN
+        },
+        "root_cause_hypothesis": "Shuffle fetch failure due to network issues or executor loss. Check network stability and shuffle service configuration."
+      },
+      {
+        "stage_id": 3,
+        "stage_attempt": 0,
+        "failure_type": "UNKNOWN",
+        "failure_reason": "Container killed by YARN due to exceeding memory limits",
+        "timestamp": 1730364100000,
+        "metrics_at_failure": {
+          "stage_id": 3,
+          "stage_attempt": 0,
+          "task_count": 1,
+          "failed": true,
+          "failure_reason": "Container killed by YARN due to exceeding memory limits",
+          "mean_task_duration": 35000.0,
+          "max_task_duration": 35000.0,
+          "task_skew": NaN
+        },
+        "root_cause_hypothesis": "Failure of type UNKNOWN. Review logs for details."
+      }
+    ],
+    "task_failures": [],
+    "executor_failures": [
+      {
+        "executor_id": "5",
+        "failure_type": "ExecutorLost",
+        "removed_reason": "ExecutorLostFailure (executor 5 exited caused by container killed by YARN for exceeding memory limits)",
+        "timestamp": 0,
+        "suspected_cause": "Executor likely failed due to memory pressure (GC pressure: HIGH). Increase spark.executor.memory and spark.executor.memoryOverhead."
+      }
+    ],
+    "oom_events": [],
+    "fetch_failures": [],
+    "summary": {
+      "total_stage_failures": 2,
+      "total_task_failures": 0,
+      "total_executor_failures": 1,
+      "total_oom_events": 0,
+      "total_fetch_failures": 0,
+      "has_critical_failures": true,
+      "failure_rate": 3.0
+    }
+  },
+  "root_cause_analysis": [
+    {
+      "root_cause": "Insufficient Memory / Memory Spill",
+      "severity": "CRITICAL",
+      "confidence": 1.0,
+      "evidence": {
+        "memoryBytesSpilled": 1637456281,
+        "memory_spilled_formatted": "1.52 GB",
+        "diskBytesSpilled": 1342177280,
+        "disk_spilled_formatted": "1.25 GB",
+        "spill_ratio": 0.7176470585605678,
+        "spill_percentage": "71.76%",
+        "tasks_with_spill": 3
+      },
+      "supporting_metrics": {
+        "memory_spilled_bytes": 1637456281,
+        "memory_spilled_formatted": "1.52 GB",
+        "spill_ratio_percentage": "71.76%",
+        "impact": "1.52 GB spilled to disk (71.8% of input data)"
+      },
+      "recommendation": "CRITICAL: 1.52 GB spilled to disk (71.8% of data). Increase executor memory by at least 50% immediately.",
+      "action_items": [
+        "Increase executor memory: spark.executor.memory",
+        "Adjust memory overhead: spark.executor.memoryOverhead",
+        "Tune off-heap memory: spark.memory.offHeap.enabled=true",
+        "Reduce shuffle partition size to fit in memory",
+        "Consider external shuffle service",
+        "Review sorting and aggregation operations"
+      ]
+    },
+    {
+      "root_cause": "System Overview",
+      "severity": "INFO",
+      "confidence": 1.0,
+      "evidence": {},
+      "supporting_metrics": {
+        "total_tasks": 4,
+        "total_input_data": "2.12 GB",
+        "total_output_data": "10.00 MB",
+        "total_shuffle_data": "0.00 B",
+        "identified_bottlenecks": 4
+      },
+      "recommendation": "Found 4 performance bottleneck(s). Review and address in priority order above.",
+      "action_items": []
+    }
+  ],
+  "recommendations": [
+    {
+      "root_cause": "Insufficient Memory / Memory Spill",
+      "severity": "CRITICAL",
+      "confidence": 1.0,
+      "recommendation": "CRITICAL: 1.52 GB spilled to disk (71.8% of data). Increase executor memory by at least 50% immediately."
+    }
+  ],
+  "action_items": {
+    "CRITICAL": [
+      {
+        "root_cause": "Insufficient Memory / Memory Spill",
+        "action": "Increase executor memory: spark.executor.memory"
+      },
+      {
+        "root_cause": "Insufficient Memory / Memory Spill",
+        "action": "Adjust memory overhead: spark.executor.memoryOverhead"
+      },
+      {
+        "root_cause": "Insufficient Memory / Memory Spill",
+        "action": "Tune off-heap memory: spark.memory.offHeap.enabled=true"
+      },
+      {
+        "root_cause": "Insufficient Memory / Memory Spill",
+        "action": "Reduce shuffle partition size to fit in memory"
+      },
+      {
+        "root_cause": "Insufficient Memory / Memory Spill",
+        "action": "Consider external shuffle service"
+      },
+      {
+        "root_cause": "Insufficient Memory / Memory Spill",
+        "action": "Review sorting and aggregation operations"
+      }
+    ],
+    "HIGH": [],
+    "MEDIUM": [],
+    "LOW": []
+  },
+  "analysis_metadata": {
+    "total_bottlenecks": 4,
+    "critical_bottlenecks": 1,
+    "high_bottlenecks": 3,
+    "total_anomalies": 1
+  }
+}

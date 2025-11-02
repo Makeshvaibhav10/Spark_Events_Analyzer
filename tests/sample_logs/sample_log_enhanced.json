@@ -1,0 +1,112 @@
+[
+  {
+    "Event": "SparkListenerJobStart",
+    "Job ID": 12,
+    "Submission Time": 1730350900000,
+    "Stage Infos": [
+      {"Stage ID": 34, "Stage Name": "aggregateByKey", "Num Tasks": 50},
+      {"Stage ID": 35, "Stage Name": "join", "Num Tasks": 100}
+    ],
+    "Properties": {"spark.job.description": "Customer-Order Join and Aggregation"}
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 34,
+      "Stage Name": "aggregateByKey",
+      "Number of Tasks": 50
+    },
+    "Submission Time": 1730350910000
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 34,
+    "Task Info": {"Task ID": 1, "Launch Time": 1730350915000, "Finish Time": 1730350922000, "Successful": true},
+    "Task Metrics": {
+      "Executor Run Time": 700,
+      "Executor CPU Time": 280,
+      "Memory Bytes Spilled": 524288000,
+      "Disk Bytes Spilled": 1073741824,
+      "Shuffle Read Bytes": 52428800,
+      "Shuffle Write Bytes": 0,
+      "JVM GC Time": 150,
+      "Executor Deserialize Time": 50
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 34,
+      "Stage Name": "aggregateByKey",
+      "Completion Time": 1730350930000,
+      "Failure Reason": null
+    }
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 35,
+      "Stage Name": "join",
+      "Number of Tasks": 100
+    },
+    "Submission Time": 1730350932000
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 35,
+    "Task Info": {
+      "Task ID": 90,
+      "Launch Time": 1730350940000,
+      "Finish Time": 1730350950000,
+      "Successful": false,
+      "Failed": true,
+      "Error Message": "FetchFailedException: Shuffle block fetch failed due to executor lost (OOM)"
+    },
+    "Task Metrics": {
+      "Executor Run Time": 500,
+      "Executor CPU Time": 150,
+      "Memory Bytes Spilled": 1073741824,
+      "Disk Bytes Spilled": 2147483648,
+      "Shuffle Read Bytes": 104857600,
+      "Shuffle Write Bytes": 0,
+      "JVM GC Time": 400,
+      "Executor Deserialize Time": 60
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 35,
+      "Stage Name": "join",
+      "Completion Time": 1730350965000,
+      "Failure Reason": "FetchFailedException (executor lost due to OOM)"
+    }
+  },
+  {
+    "Event": "SparkListenerJobEnd",
+    "Job ID": 12,
+    "Completion Time": 1730350970000,
+    "Job Result": {
+      "Result": "JobFailed",
+      "Reason": "Stage 35 failed due to executor lost (OOM)"
+    }
+  },
+  {
+    "Event": "SparkListenerEnvironmentUpdate",
+    "Spark Properties": {
+      "spark.executor.memory": "2g",
+      "spark.executor.cores": "4",
+      "spark.default.parallelism": "100"
+    }
+  },
+  {
+    "Event": "SparkListenerExecutorMetricsUpdate",
+    "Executor ID": "2",
+    "Metrics": {
+      "JVM Heap Used": 1980000000,
+      "JVM Heap Total": 2048000000,
+      "Process CPU Time": 1200000000,
+      "System CPU Load": 0.42
+    }
+  }
+]

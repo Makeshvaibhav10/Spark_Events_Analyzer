@@ -1,0 +1,61 @@
+{
+    "summary": {
+        "total_jobs": 0,
+        "total_stages": 0,
+        "total_tasks": 0,
+        "total_runtime": "0h 0m 0s"
+    },
+    "performance_summary": {
+        "task_metrics": {
+            "mean_task_duration": 500.0,
+            "std_task_duration": NaN,
+            "task_skew_ratio": NaN
+        },
+        "executor_metrics": {
+            "executor_task_counts": {
+                "1": 1
+            },
+            "executor_imbalance_ratio": NaN
+        },
+        "cpu_metrics": {
+            "cpu_efficiency": 0
+        },
+        "memory_metrics": {
+            "gc_overhead_ratio": 0,
+            "memoryBytesSpilled": 0
+        },
+        "io_metrics": {
+            "inputBytes": 0,
+            "outputBytes": 0
+        },
+        "shuffle_metrics": {
+            "shuffleReadBytes": 0,
+            "shuffleWriteBytes": 0,
+            "shuffleTime": 0,
+            "shuffle_ratio": 0
+        }
+    },
+    "bottlenecks": [
+        {
+            "bottleneck": "Underutilized CPU",
+            "metric_evidence": {
+                "cpu_efficiency": 0
+            },
+            "confidence": 0.8
+        }
+    ],
+    "failures": [],
+    "root_cause_analysis": [
+        {
+            "root_cause": "Underutilized CPU",
+            "confidence": 0.8,
+            "evidence": {
+                "cpu_efficiency": 0
+            },
+            "recommendation": "Increase the number of cores per executor or check for I/O bottlenecks."
+        }
+    ],
+    "recommendations": [
+        "Increase the number of cores per executor or check for I/O bottlenecks."
+    ]
+}

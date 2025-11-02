@@ -1,0 +1,204 @@
+{
+    "report_metadata": {
+        "generated_at": "2025-11-01T18:46:24.966975",
+        "report_version": "1.0",
+        "analysis_engine": "Spark Event Analyzer"
+    },
+    "summary": {
+        "total_jobs": 0,
+        "total_stages": 0,
+        "total_tasks": 380,
+        "total_runtime": "47m 18s",
+        "total_runtime_ms": 2838820.0,
+        "total_executors": 1
+    },
+    "performance_metrics": {
+        "task_metrics": {
+            "total_tasks": 380,
+            "mean_duration_ms": 7470.58,
+            "median_duration_ms": 8123.0,
+            "std_duration_ms": 2134.87,
+            "min_duration_ms": 4123.0,
+            "max_duration_ms": 10024.0,
+            "skew_ratio": 0.286
+        },
+        "cpu_metrics": {
+            "efficiency": 0.403,
+            "efficiency_percentage": "40.29%"
+        },
+        "memory_metrics": {
+            "gc_overhead_ratio": 0.225,
+            "gc_overhead_percentage": "22.53%",
+            "memory_bytes_spilled": 2109734912,
+            "memory_spilled_formatted": "1.96 GB"
+        },
+        "io_metrics": {
+            "input_bytes": 0,
+            "input_formatted": "0.00 B",
+            "output_bytes": 0,
+            "output_formatted": "0.00 B"
+        },
+        "shuffle_metrics": {
+            "shuffle_read_bytes": 0,
+            "shuffle_read_formatted": "0.00 B",
+            "shuffle_write_bytes": 0,
+            "shuffle_write_formatted": "0.00 B",
+            "shuffle_time_ms": 0,
+            "shuffle_ratio": 0.0,
+            "shuffle_ratio_percentage": "0.00%"
+        },
+        "executor_metrics": {
+            "total_executors": 1,
+            "imbalance_ratio": 0.0,
+            "task_distribution": {
+                "mock_executor": 380
+            }
+        }
+    },
+    "bottlenecks": [
+        {
+            "bottleneck": "GC Overhead",
+            "severity": "HIGH",
+            "metric_evidence": {
+                "gc_overhead_ratio": 0.22528735632183908,
+                "memoryBytesSpilled": 2109734912
+            },
+            "confidence": 0.8,
+            "impact": "GC consumes 22.5% of executor runtime"
+        },
+        {
+            "bottleneck": "Underutilized CPU",
+            "severity": "MEDIUM",
+            "metric_evidence": {
+                "cpu_efficiency": 0.4029064039408867
+            },
+            "confidence": 0.75,
+            "impact": "CPUs are only 40.3% utilized"
+        }
+    ],
+    "warnings": [],
+    "analysis_metadata": {
+        "total_bottlenecks": 2,
+        "critical_bottlenecks": 0,
+        "high_bottlenecks": 1
+    },
+    "failures": [],
+    "root_cause_analysis": [
+        {
+            "root_cause": "Memory Pressure / Excessive GC Overhead",
+            "severity": "HIGH",
+            "confidence": 0.8,
+            "evidence": {
+                "gc_overhead_ratio": 0.22528735632183908,
+                "memoryBytesSpilled": 2109734912
+            },
+            "supporting_metrics": {
+                "gc_overhead_percentage": "22.53%",
+                "memory_spilled_bytes": 2109734912,
+                "memory_spilled_formatted": "1.96 GB",
+                "impact": "GC consumes 22.5% of executor runtime"
+            },
+            "recommendation": "HIGH: GC overhead is 22.5%. Increase executor memory by 20-30% and tune GC settings. Consider reviewing caching strategy.",
+            "action_items": [
+                "Increase executor memory: spark.executor.memory (current impact: 22.5% GC time)",
+                "Tune GC settings: Consider G1GC with -XX:+UseG1GC",
+                "Review spark.memory.fraction (default: 0.6)",
+                "Check for memory leaks in UDFs or transformations",
+                "Consider increasing spark.memory.storageFraction if caching is heavy"
+            ]
+        },
+        {
+            "root_cause": "CPU Underutilization",
+            "severity": "MEDIUM",
+            "confidence": 0.75,
+            "evidence": {
+                "cpu_efficiency": 0.4029064039408867
+            },
+            "supporting_metrics": {
+                "cpu_efficiency_percentage": "40.29%",
+                "cpu_waste_percentage": "59.71%",
+                "impact": "CPUs are only 40.3% utilized"
+            },
+            "recommendation": "HIGH: CPU utilization is only 40.3%. Increase parallelism and check for I/O bottlenecks.",
+            "action_items": [
+                "Increase cores per executor: spark.executor.cores (current utilization: 40.3%)",
+                "Check for I/O bottlenecks causing CPU idle time",
+                "Verify data locality: review spark.locality.wait",
+                "Increase parallelism: spark.default.parallelism",
+                "Review serialization overhead: use Kryo serializer",
+                "Check network bandwidth if shuffle-heavy"
+            ]
+        },
+        {
+            "root_cause": "System Overview",
+            "severity": "INFO",
+            "confidence": 1.0,
+            "evidence": {},
+            "supporting_metrics": {
+                "total_tasks": 380,
+                "total_input_data": "0.00 B",
+                "total_output_data": "0.00 B",
+                "total_shuffle_data": "0.00 B",
+                "identified_bottlenecks": 2
+            },
+            "recommendation": "Found 2 performance bottleneck(s). Review and address in priority order above.",
+            "action_items": []
+        }
+    ],
+    "recommendations": [
+        "HIGH: GC overhead is 22.5%. Increase executor memory by 20-30% and tune GC settings. Consider reviewing caching strategy.",
+        "HIGH: CPU utilization is only 40.3%. Increase parallelism and check for I/O bottlenecks."
+    ],
+    "action_items": {
+        "CRITICAL": [],
+        "HIGH": [
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Increase executor memory: spark.executor.memory (current impact: 22.5% GC time)"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Tune GC settings: Consider G1GC with -XX:+UseG1GC"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Review spark.memory.fraction (default: 0.6)"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Check for memory leaks in UDFs or transformations"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Consider increasing spark.memory.storageFraction if caching is heavy"
+            }
+        ],
+        "MEDIUM": [
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Increase cores per executor: spark.executor.cores (current utilization: 40.3%)"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Check for I/O bottlenecks causing CPU idle time"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Verify data locality: review spark.locality.wait"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Increase parallelism: spark.default.parallelism"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Review serialization overhead: use Kryo serializer"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Check network bandwidth if shuffle-heavy"
+            }
+        ],
+        "LOW": []
+    }
+}

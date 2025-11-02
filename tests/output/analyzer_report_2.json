@@ -1,0 +1,336 @@
+{
+    "report_metadata": {
+        "generated_at": "2025-11-01T15:55:08.781681",
+        "report_version": "1.0",
+        "analysis_engine": "Spark Event Analyzer"
+    },
+    "summary": {
+        "total_jobs": 0,
+        "total_stages": 0,
+        "total_tasks": 4,
+        "total_runtime": "1m 13s",
+        "total_runtime_ms": 73000.0,
+        "total_executors": 4
+    },
+    "performance_metrics": {
+        "task_metrics": {
+            "total_tasks": 4,
+            "mean_duration_ms": 18250.0,
+            "median_duration_ms": 18000.0,
+            "std_duration_ms": 16660.83,
+            "min_duration_ms": 2000.0,
+            "max_duration_ms": 35000.0,
+            "skew_ratio": 0.913
+        },
+        "cpu_metrics": {
+            "efficiency": 0.36,
+            "efficiency_percentage": "36.03%"
+        },
+        "memory_metrics": {
+            "gc_overhead_ratio": 0.242,
+            "gc_overhead_percentage": "24.18%",
+            "memory_bytes_spilled": 1637456281,
+            "memory_spilled_formatted": "1.52 GB"
+        },
+        "io_metrics": {
+            "input_bytes": 2281701376,
+            "input_formatted": "2.12 GB",
+            "output_bytes": 10485760,
+            "output_formatted": "10.00 MB"
+        },
+        "shuffle_metrics": {
+            "shuffle_read_bytes": 0,
+            "shuffle_read_formatted": "0.00 B",
+            "shuffle_write_bytes": 0,
+            "shuffle_write_formatted": "0.00 B",
+            "shuffle_time_ms": 0,
+            "shuffle_ratio": 0.0,
+            "shuffle_ratio_percentage": "0.00%"
+        },
+        "executor_metrics": {
+            "total_executors": 4,
+            "imbalance_ratio": 0.0,
+            "task_distribution": {
+                "3": 1,
+                "4": 1,
+                "5": 1,
+                "6": 1
+            }
+        }
+    },
+    "bottlenecks": [
+        {
+            "bottleneck": "GC Overhead",
+            "severity": "HIGH",
+            "metric_evidence": {
+                "gc_overhead_ratio": 0.24178082191780823,
+                "memoryBytesSpilled": 1637456281
+            },
+            "confidence": 0.8,
+            "impact": "GC consumes 24.2% of executor runtime"
+        },
+        {
+            "bottleneck": "Data Skew Detected",
+            "severity": "HIGH",
+            "metric_evidence": {
+                "task_skew_ratio": 0.9129223184735645,
+                "mean_task_duration": 18250.0,
+                "std_task_duration": 16660.832312142553,
+                "min_task_duration": 2000.0,
+                "max_task_duration": 35000.0,
+                "total_tasks": 4
+            },
+            "confidence": 0.85,
+            "impact": "Task duration variance is 91.3% of mean duration"
+        },
+        {
+            "bottleneck": "Underutilized CPU",
+            "severity": "HIGH",
+            "metric_evidence": {
+                "cpu_efficiency": 0.36027397260273974
+            },
+            "confidence": 0.75,
+            "impact": "CPUs are only 36.0% utilized"
+        },
+        {
+            "bottleneck": "Memory Spill to Disk",
+            "severity": "HIGH",
+            "metric_evidence": {
+                "memoryBytesSpilled": 1637456281,
+                "spill_ratio": 0.7176470585605678
+            },
+            "confidence": 0.9,
+            "impact": "1.52 GB spilled to disk"
+        }
+    ],
+    "warnings": [],
+    "analysis_metadata": {
+        "total_bottlenecks": 4,
+        "critical_bottlenecks": 0,
+        "high_bottlenecks": 4
+    },
+    "failures": [],
+    "root_cause_analysis": [
+        {
+            "root_cause": "Memory Pressure / Excessive GC Overhead",
+            "severity": "HIGH",
+            "confidence": 0.8,
+            "evidence": {
+                "gc_overhead_ratio": 0.24178082191780823,
+                "memoryBytesSpilled": 1637456281
+            },
+            "supporting_metrics": {
+                "gc_overhead_percentage": "24.18%",
+                "memory_spilled_bytes": 1637456281,
+                "memory_spilled_formatted": "1.52 GB",
+                "impact": "GC consumes 24.2% of executor runtime"
+            },
+            "recommendation": "HIGH: GC overhead is 24.2%. Increase executor memory by 20-30% and tune GC settings. Consider reviewing caching strategy.",
+            "action_items": [
+                "Increase executor memory: spark.executor.memory (current impact: 24.2% GC time)",
+                "Tune GC settings: Consider G1GC with -XX:+UseG1GC",
+                "Review spark.memory.fraction (default: 0.6)",
+                "Check for memory leaks in UDFs or transformations",
+                "Consider increasing spark.memory.storageFraction if caching is heavy"
+            ]
+        },
+        {
+            "root_cause": "Data Skew / Uneven Partition Distribution",
+            "severity": "HIGH",
+            "confidence": 0.85,
+            "evidence": {
+                "task_skew_ratio": 0.9129223184735645,
+                "mean_task_duration": 18250.0,
+                "std_task_duration": 16660.832312142553,
+                "min_task_duration": 2000.0,
+                "max_task_duration": 35000.0,
+                "total_tasks": 4
+            },
+            "supporting_metrics": {
+                "task_skew_ratio": "0.91",
+                "mean_task_duration_ms": 18250.0,
+                "max_task_duration_ms": 35000.0,
+                "min_task_duration_ms": 2000.0,
+                "duration_range_ms": 33000.0,
+                "slowest_vs_fastest_ratio": "17.50x",
+                "total_tasks": 4,
+                "impact": "Task duration variance is 91.3% of mean duration"
+            },
+            "recommendation": "CRITICAL: Severe data skew detected. Slowest task is 17.5x slower than fastest. Enable skew join optimization and use salting technique.",
+            "action_items": [
+                "Enable Adaptive Query Execution for skew handling: spark.sql.adaptive.enabled=true",
+                "Enable skew join optimization: spark.sql.adaptive.skewJoin.enabled=true",
+                "Repartition by key with salt: df.repartition('key', 'salt')",
+                "Use approximate percentiles to identify skewed keys",
+                "Consider filtering out or handling outlier keys separately",
+                "Increase parallelism for skewed stages"
+            ]
+        },
+        {
+            "root_cause": "CPU Underutilization",
+            "severity": "HIGH",
+            "confidence": 0.75,
+            "evidence": {
+                "cpu_efficiency": 0.36027397260273974
+            },
+            "supporting_metrics": {
+                "cpu_efficiency_percentage": "36.03%",
+                "cpu_waste_percentage": "63.97%",
+                "impact": "CPUs are only 36.0% utilized"
+            },
+            "recommendation": "CRITICAL: CPUs are 64.0% idle. Likely I/O bound or severe serialization overhead. Investigate disk/network bottlenecks immediately.",
+            "action_items": [
+                "Increase cores per executor: spark.executor.cores (current utilization: 36.0%)",
+                "Check for I/O bottlenecks causing CPU idle time",
+                "Verify data locality: review spark.locality.wait",
+                "Increase parallelism: spark.default.parallelism",
+                "Review serialization overhead: use Kryo serializer",
+                "Check network bandwidth if shuffle-heavy"
+            ]
+        },
+        {
+            "root_cause": "Insufficient Memory / Memory Spill",
+            "severity": "HIGH",
+            "confidence": 0.9,
+            "evidence": {
+                "memoryBytesSpilled": 1637456281,
+                "spill_ratio": 0.7176470585605678
+            },
+            "supporting_metrics": {
+                "memory_spilled_bytes": 1637456281,
+                "memory_spilled_formatted": "1.52 GB",
+                "spill_ratio_percentage": "71.76%",
+                "impact": "1.52 GB spilled to disk"
+            },
+            "recommendation": "CRITICAL: 1.52 GB spilled to disk (71.8% of data). Increase executor memory by at least 50% immediately.",
+            "action_items": [
+                "Increase executor memory: spark.executor.memory",
+                "Adjust memory overhead: spark.executor.memoryOverhead",
+                "Tune off-heap memory: spark.memory.offHeap.enabled=true",
+                "Reduce shuffle partition size to fit in memory",
+                "Consider external shuffle service",
+                "Review sorting and aggregation operations"
+            ]
+        },
+        {
+            "root_cause": "System Overview",
+            "severity": "INFO",
+            "confidence": 1.0,
+            "evidence": {},
+            "supporting_metrics": {
+                "total_tasks": 4,
+                "total_input_data": "2.12 GB",
+                "total_output_data": "10.00 MB",
+                "total_shuffle_data": "0.00 B",
+                "identified_bottlenecks": 4
+            },
+            "recommendation": "Found 4 performance bottleneck(s). Review and address in priority order above.",
+            "action_items": []
+        }
+    ],
+    "recommendations": [
+        "HIGH: GC overhead is 24.2%. Increase executor memory by 20-30% and tune GC settings. Consider reviewing caching strategy.",
+        "CRITICAL: Severe data skew detected. Slowest task is 17.5x slower than fastest. Enable skew join optimization and use salting technique.",
+        "CRITICAL: CPUs are 64.0% idle. Likely I/O bound or severe serialization overhead. Investigate disk/network bottlenecks immediately.",
+        "CRITICAL: 1.52 GB spilled to disk (71.8% of data). Increase executor memory by at least 50% immediately."
+    ],
+    "action_items": {
+        "CRITICAL": [],
+        "HIGH": [
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Increase executor memory: spark.executor.memory (current impact: 24.2% GC time)"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Tune GC settings: Consider G1GC with -XX:+UseG1GC"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Review spark.memory.fraction (default: 0.6)"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Check for memory leaks in UDFs or transformations"
+            },
+            {
+                "root_cause": "Memory Pressure / Excessive GC Overhead",
+                "action": "Consider increasing spark.memory.storageFraction if caching is heavy"
+            },
+            {
+                "root_cause": "Data Skew / Uneven Partition Distribution",
+                "action": "Enable Adaptive Query Execution for skew handling: spark.sql.adaptive.enabled=true"
+            },
+            {
+                "root_cause": "Data Skew / Uneven Partition Distribution",
+                "action": "Enable skew join optimization: spark.sql.adaptive.skewJoin.enabled=true"
+            },
+            {
+                "root_cause": "Data Skew / Uneven Partition Distribution",
+                "action": "Repartition by key with salt: df.repartition('key', 'salt')"
+            },
+            {
+                "root_cause": "Data Skew / Uneven Partition Distribution",
+                "action": "Use approximate percentiles to identify skewed keys"
+            },
+            {
+                "root_cause": "Data Skew / Uneven Partition Distribution",
+                "action": "Consider filtering out or handling outlier keys separately"
+            },
+            {
+                "root_cause": "Data Skew / Uneven Partition Distribution",
+                "action": "Increase parallelism for skewed stages"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Increase cores per executor: spark.executor.cores (current utilization: 36.0%)"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Check for I/O bottlenecks causing CPU idle time"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Verify data locality: review spark.locality.wait"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Increase parallelism: spark.default.parallelism"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Review serialization overhead: use Kryo serializer"
+            },
+            {
+                "root_cause": "CPU Underutilization",
+                "action": "Check network bandwidth if shuffle-heavy"
+            },
+            {
+                "root_cause": "Insufficient Memory / Memory Spill",
+                "action": "Increase executor memory: spark.executor.memory"
+            },
+            {
+                "root_cause": "Insufficient Memory / Memory Spill",
+                "action": "Adjust memory overhead: spark.executor.memoryOverhead"
+            },
+            {
+                "root_cause": "Insufficient Memory / Memory Spill",
+                "action": "Tune off-heap memory: spark.memory.offHeap.enabled=true"
+            },
+            {
+                "root_cause": "Insufficient Memory / Memory Spill",
+                "action": "Reduce shuffle partition size to fit in memory"
+            },
+            {
+                "root_cause": "Insufficient Memory / Memory Spill",
+                "action": "Consider external shuffle service"
+            },
+            {
+                "root_cause": "Insufficient Memory / Memory Spill",
+                "action": "Review sorting and aggregation operations"
+            }
+        ],
+        "MEDIUM": [],
+        "LOW": []
+    }
+}

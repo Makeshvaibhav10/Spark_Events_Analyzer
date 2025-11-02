@@ -1,0 +1,224 @@
+{
+  "stage_summary": {
+    "total_stages": 2,
+    "failed_stages": 1,
+    "stages_with_issues": 2,
+    "healthy_stages": 0,
+    "total_duration_ms": 17000,
+    "total_duration_formatted": "17.0s"
+  },
+  "job_summary": {
+    "total_jobs": 1,
+    "failed_jobs": 1,
+    "successful_jobs": 0
+  },
+  "stage_details": {
+    "34": {
+      "stage_id": 34,
+      "stage_name": "aggregateByKey",
+      "stage_attempt": 0,
+      "status": "SUCCESS",
+      "transformation": {
+        "type": "unknown",
+        "operation": "unknown",
+        "stage_name": "aggregateByKey",
+        "rdd_names": [],
+        "is_shuffle_stage": false,
+        "is_wide_transformation": false
+      },
+      "metrics": {
+        "total_tasks": 1,
+        "total_duration_ms": 7000,
+        "mean_task_duration_ms": 7000.0,
+        "max_task_duration_ms": 7000,
+        "min_task_duration_ms": 7000,
+        "task_skew": 0.0,
+        "total_gc_time_ms": 150,
+        "gc_ratio": 0.02142857142857143,
+        "total_memory_spilled": 524288000,
+        "total_shuffle_read": 0,
+        "shuffle_ratio": 0
+      },
+      "issues": [
+        {
+          "type": "MEMORY_SPILL",
+          "severity": "MEDIUM",
+          "description": "Memory spill: 500.00 MB",
+          "metric": "total_memory_spilled",
+          "value": 524288000
+        }
+      ],
+      "parent_stages": [],
+      "task_details": {
+        "total_tasks": 1,
+        "unique_executors": 0,
+        "locality_distribution": {},
+        "speculative_tasks": 0
+      },
+      "failure_reason": null
+    },
+    "35": {
+      "stage_id": 35,
+      "stage_name": "join",
+      "stage_attempt": 0,
+      "status": "FAILED",
+      "transformation": {
+        "type": "join",
+        "operation": "join",
+        "stage_name": "join",
+        "rdd_names": [],
+        "is_shuffle_stage": false,
+        "is_wide_transformation": true
+      },
+      "metrics": {
+        "total_tasks": 1,
+        "total_duration_ms": 10000,
+        "mean_task_duration_ms": 10000.0,
+        "max_task_duration_ms": 10000,
+        "min_task_duration_ms": 10000,
+        "task_skew": 0.0,
+        "total_gc_time_ms": 400,
+        "gc_ratio": 0.04,
+        "total_memory_spilled": 1073741824,
+        "total_shuffle_read": 0,
+        "shuffle_ratio": 0
+      },
+      "issues": [
+        {
+          "type": "MEMORY_SPILL",
+          "severity": "HIGH",
+          "description": "Memory spill: 1.00 GB",
+          "metric": "total_memory_spilled",
+          "value": 1073741824
+        },
+        {
+          "type": "STAGE_FAILURE",
+          "severity": "CRITICAL",
+          "description": "Stage failed: FetchFailedException (executor lost due to OOM)",
+          "metric": "failure",
+          "value": "FetchFailedException (executor lost due to OOM)"
+        }
+      ],
+      "parent_stages": [],
+      "task_details": {
+        "total_tasks": 1,
+        "unique_executors": 0,
+        "locality_distribution": {},
+        "speculative_tasks": 0
+      },
+      "failure_reason": "FetchFailedException (executor lost due to OOM)"
+    }
+  },
+  "job_details": {
+    "12": {
+      "job_id": 12,
+      "status": "FAILED",
+      "total_stages": 0,
+      "stage_ids": [],
+      "total_duration_ms": 0,
+      "total_tasks": 0,
+      "failed_stages": [],
+      "problematic_stages": [],
+      "submission_time": 1730350900000,
+      "completion_time": 1730350970000
+    }
+  },
+  "problematic_transformations": [
+    {
+      "stage_id": 34,
+      "stage_name": "aggregateByKey",
+      "transformation_type": "unknown",
+      "operation": "unknown",
+      "is_wide_transformation": false,
+      "issues": [
+        {
+          "type": "MEMORY_SPILL",
+          "severity": "MEDIUM",
+          "description": "Memory spill: 500.00 MB",
+          "metric": "total_memory_spilled",
+          "value": 524288000
+        }
+      ],
+      "severity": "MEDIUM"
+    },
+    {
+      "stage_id": 35,
+      "stage_name": "join",
+      "transformation_type": "join",
+      "operation": "join",
+      "is_wide_transformation": true,
+      "issues": [
+        {
+          "type": "MEMORY_SPILL",
+          "severity": "HIGH",
+          "description": "Memory spill: 1.00 GB",
+          "metric": "total_memory_spilled",
+          "value": 1073741824
+        },
+        {
+          "type": "STAGE_FAILURE",
+          "severity": "CRITICAL",
+          "description": "Stage failed: FetchFailedException (executor lost due to OOM)",
+          "metric": "failure",
+          "value": "FetchFailedException (executor lost due to OOM)"
+        }
+      ],
+      "severity": "CRITICAL"
+    }
+  ],
+  "bottleneck_mapping": {
+    "gc_pressure_stages": [],
+    "data_skew_stages": [],
+    "memory_spill_stages": [
+      34,
+      35
+    ],
+    "shuffle_heavy_stages": [],
+    "failed_stages": [
+      35
+    ]
+  },
+  "performance_hotspots": [
+    {
+      "stage_id": 35,
+      "stage_name": "join",
+      "duration_ms": 10000,
+      "duration_formatted": "10.0s",
+      "task_count": 1,
+      "issues": [
+        {
+          "type": "MEMORY_SPILL",
+          "severity": "HIGH",
+          "description": "Memory spill: 1.00 GB",
+          "metric": "total_memory_spilled",
+          "value": 1073741824
+        },
+        {
+          "type": "STAGE_FAILURE",
+          "severity": "CRITICAL",
+          "description": "Stage failed: FetchFailedException (executor lost due to OOM)",
+          "metric": "failure",
+          "value": "FetchFailedException (executor lost due to OOM)"
+        }
+      ],
+      "transformation": "join"
+    },
+    {
+      "stage_id": 34,
+      "stage_name": "aggregateByKey",
+      "duration_ms": 7000,
+      "duration_formatted": "7.0s",
+      "task_count": 1,
+      "issues": [
+        {
+          "type": "MEMORY_SPILL",
+          "severity": "MEDIUM",
+          "description": "Memory spill: 500.00 MB",
+          "metric": "total_memory_spilled",
+          "value": 524288000
+        }
+      ],
+      "transformation": "unknown"
+    }
+  ]
+}

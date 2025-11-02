@@ -1,0 +1,208 @@
+{
+  "report_metadata": {
+    "generated_at": "2025-11-01T22:59:05.238582",
+    "report_version": "2.0",
+    "analysis_engine": "Spark Event Analyzer - Phase 2",
+    "analyzer_capabilities": [
+      "Bottleneck Detection",
+      "Root Cause Analysis",
+      "Failure Detection",
+      "Correlation Analysis",
+      "Dynamic Thresholding"
+    ]
+  },
+  "executive_summary": {
+    "health_score": 63,
+    "health_status": "FAIR",
+    "total_bottlenecks": 2,
+    "critical_bottlenecks": 1,
+    "high_priority_bottlenecks": 1,
+    "total_anomalies": 1,
+    "requires_immediate_action": true,
+    "primary_concerns": [
+      "GC Overhead / Memory Pressure [CRITICAL]",
+      "CPU Underutilization / CPU Underutilization [HIGH]"
+    ],
+    "total_failures": 1,
+    "has_oom_events": false
+  },
+  "performance_metrics": {
+    "global": {
+      "total_jobs": 1,
+      "total_stages": 2,
+      "total_tasks": 2,
+      "application_duration": "0ms",
+      "application_duration_ms": 0
+    },
+    "task_metrics": {
+      "total_tasks": 2,
+      "mean_duration_ms": 8500.0,
+      "median_duration_ms": 8500.0,
+      "std_duration_ms": 2121.32,
+      "skew_ratio": 0.25,
+      "coefficient_of_variation": 0.25,
+      "percentiles": {
+        "p25": 7750.0,
+        "p50": 8500.0,
+        "p75": 9250.0,
+        "p90": 9700.0,
+        "p95": 9850.0,
+        "p99": 9970.0
+      },
+      "stragglers": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "cpu_metrics": {
+      "efficiency": 0.358,
+      "efficiency_percentage": "35.83%",
+      "wait_percentage": "64.17%",
+      "deserialize_overhead_percentage": "9.17%"
+    },
+    "memory_metrics": {
+      "gc_overhead_ratio": 0.458,
+      "gc_overhead_percentage": "45.83%",
+      "gc_pressure_level": "CRITICAL",
+      "memory_bytes_spilled": 1598029824,
+      "memory_spilled_formatted": "1.49 GB",
+      "disk_bytes_spilled": 3221225472,
+      "total_spilled_formatted": "4.49 GB",
+      "tasks_with_spill": 2
+    },
+    "io_metrics": {
+      "input_bytes": 0,
+      "input_formatted": "0.00 B",
+      "output_bytes": 0,
+      "output_formatted": "0.00 B",
+      "input_records": 0
+    },
+    "shuffle_metrics": {
+      "shuffle_read_bytes": 0,
+      "shuffle_read_formatted": "0.00 B",
+      "shuffle_write_bytes": 0,
+      "shuffle_write_formatted": "0.00 B",
+      "total_shuffle_formatted": "0.00 B",
+      "shuffle_time_ms": 0,
+      "shuffle_ratio": 0.0,
+      "shuffle_ratio_percentage": "0.00%",
+      "shuffle_efficiency": 0.0
+    },
+    "executor_metrics": {
+      "total_executors": 0,
+      "imbalance_ratio": 0,
+      "load_imbalance_percentage": 0,
+      "min_tasks_per_executor": 0,
+      "max_tasks_per_executor": 0,
+      "mean_tasks_per_executor": 0
+    },
+    "correlations": {
+      "gc_vs_duration": 1.0,
+      "spill_vs_gc": 1.0,
+      "shuffle_vs_duration": 0.0,
+      "cpu_vs_duration": -1.0
+    }
+  },
+  "bottlenecks": [
+    {
+      "bottleneck": "GC Overhead / Memory Pressure",
+      "type": "MEMORY",
+      "severity": "CRITICAL",
+      "confidence": 1.0,
+      "impact_score": 0.9166666666666666,
+      "metric_evidence": {
+        "gc_overhead_ratio": 0.4583333333333333,
+        "gc_overhead_percentage": "45.83%",
+        "memoryBytesSpilled": 1598029824,
+        "memory_spilled_formatted": "1.49 GB",
+        "gc_pressure_level": "CRITICAL",
+        "total_gc_time_ms": 550
+      },
+      "correlation_evidence": {
+        "spill_vs_gc_correlation": 1.0,
+        "correlation_strength": "STRONG"
+      },
+      "reasoning": "Probable Cause: Memory pressure due to critical garbage collection overhead. Supporting Evidence: GC consumes 45.8% of executor runtime, 1.49 GB spilled to disk (strong correlation: 1.00). Confidence based on GC impact severity and correlation with memory metrics.",
+      "impact": "GC consumes 45.8% of executor runtime, causing performance degradation"
+    },
+    {
+      "bottleneck": "CPU Underutilization / CPU Underutilization",
+      "type": "CPU",
+      "severity": "HIGH",
+      "confidence": 0.7972598348599453,
+      "impact_score": 0.6416666666666666,
+      "metric_evidence": {
+        "cpu_efficiency": 0.35833333333333334,
+        "cpu_utilization_percentage": "35.83%",
+        "cpu_wait_percentage": "64.17%",
+        "shuffle_ratio": 0.0,
+        "deserialize_overhead_percentage": 9.166666666666666
+      },
+      "correlation_evidence": {
+        "is_io_bottleneck": false,
+        "shuffle_correlation": "LOW"
+      },
+      "reasoning": "Probable Cause: CPU underutilization with 64.2% CPU idle time. Supporting Evidence: CPU efficiency is 35.8%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient parallelism.",
+      "impact": "CPUs are 64.2% idle, indicating inefficient resource utilization"
+    }
+  ],
+  "anomalies": [
+    {
+      "type": "STAGE_FAILURES",
+      "severity": "CRITICAL",
+      "count": 1,
+      "failure_rate": 0.5,
+      "description": "1 stage(s) failed (50.0% failure rate)"
+    }
+  ],
+  "warnings": [],
+  "failures": {
+    "stage_failures": [
+      {
+        "stage_id": 35,
+        "stage_attempt": 0,
+        "failure_type": "FetchFailed",
+        "failure_reason": "FetchFailedException (executor lost due to OOM)",
+        "timestamp": 1730350965000,
+        "metrics_at_failure": {
+          "stage_id": 35,
+          "stage_attempt": 0,
+          "task_count": 1,
+          "failed": true,
+          "failure_reason": "FetchFailedException (executor lost due to OOM)",
+          "mean_task_duration": 10000.0,
+          "max_task_duration": 10000.0,
+          "task_skew": NaN
+        },
+        "root_cause_hypothesis": "Shuffle fetch failure due to network issues or executor loss. Check network stability and shuffle service configuration."
+      }
+    ],
+    "task_failures": [],
+    "executor_failures": [],
+    "oom_events": [],
+    "fetch_failures": [],
+    "summary": {
+      "total_stage_failures": 1,
+      "total_task_failures": 0,
+      "total_executor_failures": 0,
+      "total_oom_events": 0,
+      "total_fetch_failures": 0,
+      "has_critical_failures": true,
+      "failure_rate": 1.0
+    }
+  },
+  "root_cause_analysis": [],
+  "recommendations": [],
+  "action_items": {
+    "CRITICAL": [],
+    "HIGH": [],
+    "MEDIUM": [],
+    "LOW": []
+  },
+  "analysis_metadata": {
+    "total_bottlenecks": 2,
+    "critical_bottlenecks": 1,
+    "high_bottlenecks": 1,
+    "total_anomalies": 1
+  }
+}

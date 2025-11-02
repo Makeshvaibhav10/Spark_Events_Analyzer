@@ -1,0 +1,7 @@
+
+[
+  {"Event":"SparkListenerApplicationStart","App Name":"test-app","App ID":"app-20251031120000-0000","Timestamp":1635671200000,"User":"test-user"},
+  {"Event":"SparkListenerJobStart","Job ID":0,"Submission Time":1635671201000,"Stage IDs":[0, 1]},
+  {"Event":"SparkListenerStageCompleted","Stage Info":{"Stage ID":0,"Stage Attempt ID":0,"Stage Name":"collect","Number of Tasks":1,"Submission Time":1635671201000,"Completion Time":1635671202000,"Failure Reason":null}},
+  {"Event":"SparkListenerTaskEnd","Stage ID":0,"Task Type":"ResultTask","Task End Reason":{"Reason":"Success"},"Task Info":{"Task ID":0,"Attempt":0,"Executor ID":"1","Launch Time":1635671201500,"Finish Time":1635671202000,"Failed":false},"Task Metrics":{"ExecutorRunTime":500,"JVMGCTime":50}}
+]

@@ -1,0 +1,40 @@
+================================================================================
+SPARK EVENT ANALYZER - COMPREHENSIVE PERFORMANCE REPORT
+================================================================================
+
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Health Status: FAIR (63/100)
+Total Bottlenecks: 2
+Critical Issues: 1
+High Priority Issues: 1
+
+*** IMMEDIATE ACTION REQUIRED ***
+
+APPLICATION OVERVIEW
+--------------------------------------------------------------------------------
+Total Jobs: 1
+Total Stages: 2
+Total Tasks: 2
+Total Duration: 0ms
+
+KEY PERFORMANCE INDICATORS
+--------------------------------------------------------------------------------
+CPU Efficiency: 35.83%
+GC Overhead: 45.83% (CRITICAL)
+Shuffle Efficiency: 0.0
+Memory Spilled: 1.49 GB
+
+IDENTIFIED BOTTLENECKS (2)
+--------------------------------------------------------------------------------
+1. GC Overhead / Memory Pressure [CRITICAL] - Confidence: 100%
+   Impact: GC consumes 45.8% of executor runtime, causing performance degradation
+   Probable Cause: Memory pressure due to critical garbage collection overhead. Supporting Evidence: GC consumes 45.8% of executor runtime, 1.49 GB spilled to disk (strong correlation: 1.00). Confidence ...
+
+2. CPU Underutilization / CPU Underutilization [HIGH] - Confidence: 80%
+   Impact: CPUs are 64.2% idle, indicating inefficient resource utilization
+   Probable Cause: CPU underutilization with 64.2% CPU idle time. Supporting Evidence: CPU efficiency is 35.8%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient pa...
+
+================================================================================
+Report generated: 2025-11-01T22:59:05.238582
+================================================================================

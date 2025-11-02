@@ -1,0 +1,170 @@
+# Root Cause Analysis Rules Configuration
+# This file defines the mapping between bottleneck patterns and root causes
+
+rules:
+  - name: "Memory Pressure / GC Overhead"
+    patterns:
+      - metric: "gc_overhead_ratio"
+        operator: ">"
+        threshold: 0.2
+      - metric: "memoryBytesSpilled"
+        operator: ">"
+        threshold: 0
+    confidence_boost: 0.15
+    recommendations:
+      critical:
+        - "IMMEDIATE: Increase spark.executor.memory by 50-100%"
+        - "Enable G1GC: -XX:+UseG1GC -XX:InitiatingHeapOccupancyPercent=35"
+        - "Reduce spark.memory.storageFraction if heavy caching (default: 0.5)"
+        - "Review and optimize memory-intensive transformations"
+      high:
+        - "Increase spark.executor.memory by 25-30%"
+        - "Tune GC settings: Consider G1GC with appropriate heap thresholds"
+        - "Review spark.memory.fraction (default: 0.6)"
+        - "Check for memory leaks in UDFs"
+      medium:
+        - "Monitor GC patterns in Spark UI"
+        - "Consider increasing memory if GC increases over time"
+
+  - name: "Data Skew / Partition Imbalance"
+    patterns:
+      - metric: "task_skew_ratio"
+        operator: ">"
+        threshold: 0.5
+      - metric: "stragglers_percentage"
+        operator: ">"
+        threshold: 5
+    confidence_boost: 0.10
+    recommendations:
+      critical:
+        - "IMMEDIATE: Enable AQE skew join: spark.sql.adaptive.skewJoin.enabled=true"
+        - "Apply salting technique: df.withColumn('salt', rand() % N)"
+        - "Identify and isolate skewed keys for separate processing"
+        - "Consider custom partitioner for known skewed keys"
+      high:
+        - "Enable Adaptive Query Execution: spark.sql.adaptive.enabled=true"
+        - "Use salting for skewed joins: repartition with salt column"
+        - "Increase parallelism for skewed stages"
+        - "Review join strategies and partition distribution"
+      medium:
+        - "Monitor partition sizes in Spark UI"
+        - "Use repartition() before shuffle-heavy operations"
+
+  - name: "CPU Underutilization / I/O Bottleneck"
+    patterns:
+      - metric: "cpu_efficiency"
+        operator: "<"
+        threshold: 0.6
+      - metric: "shuffle_ratio"
+        operator: ">"
+        threshold: 0.3
+    confidence_boost: 0.12
+    recommendations:
+      critical:
+        - "IMMEDIATE: Increase cores per executor: spark.executor.cores"
+        - "Check network bandwidth and disk I/O capacity"
+        - "Enable compression: spark.shuffle.compress=true, spark.io.compression.codec=snappy"
+        - "Verify network configuration and locality wait times"
+      high:
+        - "Increase spark.executor.cores and spark.default.parallelism"
+        - "Review data locality: spark.locality.wait settings"
+        - "Use Kryo serialization: spark.serializer=org.apache.spark.serializer.KryoSerializer"
+        - "Check for network bottlenecks in shuffle operations"
+      medium:
+        - "Monitor CPU utilization patterns"
+        - "Review serialization overhead in Spark UI"
+
+  - name: "Memory Spill to Disk"
+    patterns:
+      - metric: "memoryBytesSpilled"
+        operator: ">"
+        threshold: 0
+      - metric: "spill_ratio"
+        operator: ">"
+        threshold: 0.1
+    confidence_boost: 0.18
+    recommendations:
+      critical:
+        - "IMMEDIATE: Increase spark.executor.memory by 50%"
+        - "Increase spark.executor.memoryOverhead by 20-30%"
+        - "Enable off-heap memory: spark.memory.offHeap.enabled=true"
+        - "Reduce shuffle partition size to fit in memory"
+      high:
+        - "Increase executor memory: spark.executor.memory"
+        - "Tune spark.memory.fraction and spark.memory.storageFraction"
+        - "Review and optimize sorting/aggregation operations"
+        - "Consider external shuffle service"
+      medium:
+        - "Monitor memory spill patterns"
+        - "Review memory-intensive operations"
+
+  - name: "Excessive Shuffle Overhead"
+    patterns:
+      - metric: "shuffle_ratio"
+        operator: ">"
+        threshold: 0.5
+    confidence_boost: 0.10
+    recommendations:
+      critical:
+        - "IMMEDIATE: Enable broadcast joins for small tables"
+        - "Set spark.sql.autoBroadcastJoinThreshold=100MB (or higher)"
+        - "Enable AQE: spark.sql.adaptive.enabled=true"
+        - "Review and optimize join strategies"
+      high:
+        - "Optimize shuffle partitions: spark.sql.shuffle.partitions"
+        - "Use broadcast joins where applicable"
+        - "Enable shuffle compression: spark.shuffle.compress=true"
+        - "Consider reduceByKey instead of groupByKey"
+      medium:
+        - "Monitor shuffle read/write patterns"
+        - "Review partitioning strategy before shuffles"
+
+  - name: "Executor Load Imbalance"
+    patterns:
+      - metric: "executor_imbalance_ratio"
+        operator: ">"
+        threshold: 0.4
+    confidence_boost: 0.08
+    recommendations:
+      critical:
+        - "IMMEDIATE: Repartition data evenly: df.repartition(N, 'key')"
+        - "Enable dynamic allocation: spark.dynamicAllocation.enabled=true"
+        - "Investigate and fix data skew at source"
+        - "Review executor placement and data locality"
+      high:
+        - "Ensure even data distribution across partitions"
+        - "Enable dynamic allocation if not already enabled"
+        - "Check for skewed joins or aggregations"
+        - "Review executor logs for anomalies"
+      medium:
+        - "Monitor executor task distribution"
+        - "Use coalesce() for reducing partitions after filters"
+
+# Severity thresholds for automatic classification
+severity_thresholds:
+  critical:
+    gc_overhead_ratio: 0.4
+    task_skew_ratio: 1.0
+    spill_ratio: 0.3
+    shuffle_ratio: 0.7
+  high:
+    gc_overhead_ratio: 0.2
+    task_skew_ratio: 0.5
+    spill_ratio: 0.1
+    shuffle_ratio: 0.5
+    executor_imbalance_ratio: 0.6
+  medium:
+    gc_overhead_ratio: 0.1
+    task_skew_ratio: 0.3
+    spill_ratio: 0.05
+    shuffle_ratio: 0.3
+    executor_imbalance_ratio: 0.4
+    cpu_efficiency: 0.75
+
+# Confidence calibration parameters
+confidence_calibration:
+  base_confidence: 0.50
+  impact_weight: 0.35
+  correlation_weight: 0.25
+  evidence_weight: 0.20
+  statistical_weight: 0.20

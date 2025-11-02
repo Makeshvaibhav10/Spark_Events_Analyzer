@@ -1,0 +1,202 @@
+[
+  {
+    "Event": "SparkListenerApplicationStart",
+    "App Name": "TestApp_FailureAndPerfAnalysis",
+    "App ID": "app-20251031-0001",
+    "Time": 1730364000000,
+    "User": "tester"
+  },
+  {
+    "Event": "SparkListenerJobStart",
+    "Job ID": 1,
+    "Submission Time": 1730364001000,
+    "Stage Infos": [
+      { "Stage ID": 1, "Stage Name": "load_raw_data", "Num Tasks": 100 }
+    ]
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 1,
+      "Stage Name": "load_raw_data",
+      "Number of Tasks": 100,
+      "Details": "Reading large parquet dataset from S3"
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 1,
+    "Task Info": {
+      "Task ID": 101,
+      "Launch Time": 1730364002000,
+      "Finish Time": 1730364008000,
+      "Executor ID": "3",
+      "Host": "10.0.0.3"
+    },
+    "Task Metrics": {
+      "Executor Run Time": 6000,
+      "Executor CPU Time": 2400,
+      "JVM GC Time": 1600,
+      "Input Metrics": { "Bytes Read": 134217728 },
+      "Shuffle Write Metrics": { "Shuffle Bytes Written": 67108864 },
+      "Memory Bytes Spilled": 26843545
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 1,
+      "Completion Time": 1730364010000,
+      "Failure Reason": null
+    }
+  },
+  {
+    "Event": "SparkListenerJobEnd",
+    "Job ID": 1,
+    "Completion Time": 1730364011000,
+    "Job Result": { "Result": "JobSucceeded" }
+  },
+
+  // --------------------------
+  // Stage 2: heavy shuffle + data skew
+  // --------------------------
+  {
+    "Event": "SparkListenerJobStart",
+    "Job ID": 2,
+    "Submission Time": 1730364020000,
+    "Stage Infos": [
+      { "Stage ID": 2, "Stage Name": "aggregate_skewed_data", "Num Tasks": 200 }
+    ]
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 2,
+    "Task Info": {
+      "Task ID": 501,
+      "Launch Time": 1730364021000,
+      "Finish Time": 1730364051000,
+      "Executor ID": "4",
+      "Host": "10.0.0.4"
+    },
+    "Task Metrics": {
+      "Executor Run Time": 30000,
+      "Executor CPU Time": 12000,
+      "JVM GC Time": 6000,
+      "Input Metrics": { "Bytes Read": 2147483648 },
+      "Shuffle Read Metrics": { "Shuffle Bytes Read": 3221225472 },
+      "Shuffle Write Metrics": { "Shuffle Bytes Written": 1073741824 },
+      "Memory Bytes Spilled": 536870912,
+      "Disk Bytes Spilled": 268435456
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 2,
+      "Completion Time": 1730364053000,
+      "Failure Reason": "org.apache.spark.shuffle.FetchFailedException: Failed to connect to executor 3 due to data skew"
+    }
+  },
+  {
+    "Event": "SparkListenerJobEnd",
+    "Job ID": 2,
+    "Completion Time": 1730364055000,
+    "Job Result": { "Result": "JobFailed" }
+  },
+
+  // --------------------------
+  // Stage 3: executor lost + GC issues
+  // --------------------------
+  {
+    "Event": "SparkListenerJobStart",
+    "Job ID": 3,
+    "Submission Time": 1730364060000,
+    "Stage Infos": [
+      { "Stage ID": 3, "Stage Name": "join_large_tables", "Num Tasks": 150 }
+    ]
+  },
+  {
+    "Event": "SparkListenerExecutorRemoved",
+    "Executor ID": "5",
+    "Removed Reason": "ExecutorLostFailure (executor 5 exited caused by container killed by YARN for exceeding memory limits)"
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 3,
+    "Task Info": {
+      "Task ID": 801,
+      "Executor ID": "5",
+      "Launch Time": 1730364061000,
+      "Finish Time": 1730364096000
+    },
+    "Task Metrics": {
+      "Executor Run Time": 35000,
+      "Executor CPU Time": 10000,
+      "JVM GC Time": 10000,
+      "Memory Bytes Spilled": 1073741824,
+      "Disk Bytes Spilled": 1073741824,
+      "Shuffle Read Metrics": { "Shuffle Bytes Read": 268435456 },
+      "Shuffle Write Metrics": { "Shuffle Bytes Written": 134217728 }
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 3,
+      "Completion Time": 1730364100000,
+      "Failure Reason": "Container killed by YARN due to exceeding memory limits"
+    }
+  },
+  {
+    "Event": "SparkListenerJobEnd",
+    "Job ID": 3,
+    "Completion Time": 1730364101000,
+    "Job Result": { "Result": "JobFailed" }
+  },
+
+  // --------------------------
+  // Stage 4: healthy short stage
+  // --------------------------
+  {
+    "Event": "SparkListenerJobStart",
+    "Job ID": 4,
+    "Submission Time": 1730364110000,
+    "Stage Infos": [
+      { "Stage ID": 4, "Stage Name": "save_output", "Num Tasks": 20 }
+    ]
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 4,
+    "Task Info": {
+      "Task ID": 901,
+      "Executor ID": "6",
+      "Launch Time": 1730364111000,
+      "Finish Time": 1730364113000
+    },
+    "Task Metrics": {
+      "Executor Run Time": 2000,
+      "Executor CPU Time": 1900,
+      "JVM GC Time": 50,
+      "Output Metrics": { "Bytes Written": 10485760 }
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 4,
+      "Completion Time": 1730364115000,
+      "Failure Reason": null
+    }
+  },
+  {
+    "Event": "SparkListenerJobEnd",
+    "Job ID": 4,
+    "Completion Time": 1730364116000,
+    "Job Result": { "Result": "JobSucceeded" }
+  },
+  {
+    "Event": "SparkListenerApplicationEnd",
+    "Time": 1730364120000
+  }
+]

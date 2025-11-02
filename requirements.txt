@@ -1,0 +1,8 @@
+ijson
+orjson
+tqdm
+psutil
+fastapi
+pytest
+pydantic
+smart_open

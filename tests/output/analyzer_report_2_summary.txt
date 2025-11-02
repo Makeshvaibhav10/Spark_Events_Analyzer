@@ -1,0 +1,85 @@
+================================================================================
+SPARK EVENT ANALYZER - PERFORMANCE REPORT
+================================================================================
+
+SUMMARY
+--------------------------------------------------------------------------------
+Total Tasks: 4
+Total Runtime: 1m 13s
+Total Executors: 4
+
+KEY PERFORMANCE INDICATORS
+--------------------------------------------------------------------------------
+CPU Efficiency: 36.03%
+GC Overhead: 24.18%
+Shuffle Overhead: 0.00%
+Task Skew Ratio: 0.913
+Executor Imbalance: 0.0
+
+IDENTIFIED BOTTLENECKS (4)
+--------------------------------------------------------------------------------
+1. GC Overhead [HIGH]
+   Impact: GC consumes 24.2% of executor runtime
+   Confidence: 80%
+
+2. Data Skew Detected [HIGH]
+   Impact: Task duration variance is 91.3% of mean duration
+   Confidence: 85%
+
+3. Underutilized CPU [HIGH]
+   Impact: CPUs are only 36.0% utilized
+   Confidence: 75%
+
+4. Memory Spill to Disk [HIGH]
+   Impact: 1.52 GB spilled to disk
+   Confidence: 90%
+
+ROOT CAUSE ANALYSIS (4)
+--------------------------------------------------------------------------------
+1. Memory Pressure / Excessive GC Overhead [HIGH]
+   Confidence: 80%
+   Recommendation: HIGH: GC overhead is 24.2%. Increase executor memory by 20-30% and tune GC settings. Consider reviewing caching strategy.
+
+2. Data Skew / Uneven Partition Distribution [HIGH]
+   Confidence: 85%
+   Recommendation: CRITICAL: Severe data skew detected. Slowest task is 17.5x slower than fastest. Enable skew join optimization and use salting technique.
+
+3. CPU Underutilization [HIGH]
+   Confidence: 75%
+   Recommendation: CRITICAL: CPUs are 64.0% idle. Likely I/O bound or severe serialization overhead. Investigate disk/network bottlenecks immediately.
+
+4. Insufficient Memory / Memory Spill [HIGH]
+   Confidence: 90%
+   Recommendation: CRITICAL: 1.52 GB spilled to disk (71.8% of data). Increase executor memory by at least 50% immediately.
+
+PRIORITIZED ACTION ITEMS
+--------------------------------------------------------------------------------
+
+HIGH Priority:
+  • Increase executor memory: spark.executor.memory (current impact: 24.2% GC time)
+  • Tune GC settings: Consider G1GC with -XX:+UseG1GC
+  • Review spark.memory.fraction (default: 0.6)
+  • Check for memory leaks in UDFs or transformations
+  • Consider increasing spark.memory.storageFraction if caching is heavy
+  • Enable Adaptive Query Execution for skew handling: spark.sql.adaptive.enabled=true
+  • Enable skew join optimization: spark.sql.adaptive.skewJoin.enabled=true
+  • Repartition by key with salt: df.repartition('key', 'salt')
+  • Use approximate percentiles to identify skewed keys
+  • Consider filtering out or handling outlier keys separately
+  • Increase parallelism for skewed stages
+  • Increase cores per executor: spark.executor.cores (current utilization: 36.0%)
+  • Check for I/O bottlenecks causing CPU idle time
+  • Verify data locality: review spark.locality.wait
+  • Increase parallelism: spark.default.parallelism
+  • Review serialization overhead: use Kryo serializer
+  • Check network bandwidth if shuffle-heavy
+  • Increase executor memory: spark.executor.memory
+  • Adjust memory overhead: spark.executor.memoryOverhead
+  • Tune off-heap memory: spark.memory.offHeap.enabled=true
+  • Reduce shuffle partition size to fit in memory
+  • Consider external shuffle service
+  • Review sorting and aggregation operations
+
+================================================================================
+Report generated: 2025-11-01T15:55:08.781681
+================================================================================

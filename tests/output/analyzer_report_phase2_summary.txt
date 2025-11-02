@@ -1,0 +1,48 @@
+================================================================================
+SPARK EVENT ANALYZER - COMPREHENSIVE PERFORMANCE REPORT
+================================================================================
+
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Health Status: CRITICAL (35/100)
+Total Bottlenecks: 4
+Critical Issues: 1
+High Priority Issues: 3
+
+*** IMMEDIATE ACTION REQUIRED ***
+
+APPLICATION OVERVIEW
+--------------------------------------------------------------------------------
+Total Jobs: 4
+Total Stages: 4
+Total Tasks: 4
+Total Duration: 2m 0s
+
+KEY PERFORMANCE INDICATORS
+--------------------------------------------------------------------------------
+CPU Efficiency: 36.03%
+GC Overhead: 24.18% (HIGH)
+Shuffle Efficiency: 1.0
+Memory Spilled: 1.52 GB
+
+IDENTIFIED BOTTLENECKS (4)
+--------------------------------------------------------------------------------
+1. Memory Spill to Disk [CRITICAL] - Confidence: 100%
+   Impact: 1.52 GB spilled to disk (71.8% of input data)
+   Probable Cause: Insufficient executor memory causing data spill. Supporting Evidence: 1.52 GB spilled to memory, 1.25 GB spilled to disk (71.8% of input data). Indicates memory pressure requiring incr...
+
+2. GC Overhead / Memory Pressure [HIGH] - Confidence: 94%
+   Impact: GC consumes 24.2% of executor runtime, causing performance degradation
+   Probable Cause: Memory pressure due to high garbage collection overhead. Supporting Evidence: GC consumes 24.2% of executor runtime, 1.52 GB spilled to disk (strong correlation: 0.99). Confidence base...
+
+3. Data Skew / Partition Imbalance [HIGH] - Confidence: 90%
+   Impact: Task duration variance is 91.3% of mean, with 0.0% straggler tasks
+   Probable Cause: Data skew causing uneven partition distribution. Supporting Evidence: Task duration variance is 91.3% of mean, 0.0% of tasks are stragglers. P99 task is 1.9x slower than median. Indica...
+
+4. CPU Underutilization / CPU Underutilization [HIGH] - Confidence: 80%
+   Impact: CPUs are 64.0% idle, indicating inefficient resource utilization
+   Probable Cause: CPU underutilization with 64.0% CPU idle time. Supporting Evidence: CPU efficiency is 36.0%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient pa...
+
+================================================================================
+Report generated: 2025-11-01T22:23:28.290193
+================================================================================

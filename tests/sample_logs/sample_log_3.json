@@ -1,0 +1,89 @@
+{
+  "applicationId": "app-20251101-0100",
+  "applicationName": "ETL-UserBehavior-Aggregator",
+  "sparkVersion": "3.5.1",
+  "startTime": "2025-11-01T09:42:33.125Z",
+  "endTime": "2025-11-01T10:10:58.342Z",
+  "stages": [
+    {
+      "stageId": 3,
+      "name": "Join UserBehavior + ClickStream",
+      "numTasks": 200,
+      "executorRunTime": 324000,
+      "gcTime": 81200,
+      "memoryBytesSpilled": 1572864000,
+      "diskBytesSpilled": 1410065408,
+      "taskMetrics": {
+        "avgCpuUtilization": 0.38,
+        "avgTaskDurationMs": 8123,
+        "maxTaskDurationMs": 143821,
+        "failedTasks": 12,
+        "fetchFailed": true,
+        "failureReason": "org.apache.spark.shuffle.FetchFailedException: Failed to fetch shuffle block"
+      }
+    },
+    {
+      "stageId": 4,
+      "name": "Aggregate ClickCounts",
+      "numTasks": 100,
+      "executorRunTime": 110000,
+      "gcTime": 18000,
+      "memoryBytesSpilled": 0,
+      "taskMetrics": {
+        "avgCpuUtilization": 0.65,
+        "avgTaskDurationMs": 4123,
+        "maxTaskDurationMs": 6200,
+        "failedTasks": 0,
+        "fetchFailed": false
+      }
+    },
+    {
+      "stageId": 5,
+      "name": "Write to Parquet",
+      "numTasks": 80,
+      "executorRunTime": 175000,
+      "gcTime": 38000,
+      "memoryBytesSpilled": 536870912,
+      "diskBytesSpilled": 268435456,
+      "taskMetrics": {
+        "avgCpuUtilization": 0.29,
+        "avgTaskDurationMs": 10024,
+        "maxTaskDurationMs": 30122,
+        "failedTasks": 4,
+        "fetchFailed": false,
+        "failureReason": "java.io.IOException: Disk I/O Error during write"
+      }
+    }
+  ],
+  "executors": [
+    {
+      "id": "2",
+      "totalDuration": 425000,
+      "gcTime": 102000,
+      "totalInputBytes": 13421772800,
+      "totalShuffleRead": 2147483648,
+      "totalShuffleWrite": 1073741824,
+      "maxMemoryUsage": 0.92,
+      "lost": true,
+      "lossReason": "Container killed by YARN for exceeding memory limits. 11.2 GB of 10 GB physical memory used."
+    },
+    {
+      "id": "5",
+      "totalDuration": 412000,
+      "gcTime": 82000,
+      "totalInputBytes": 4294967296,
+      "totalShuffleRead": 1073741824,
+      "totalShuffleWrite": 1073741824,
+      "maxMemoryUsage": 0.85
+    }
+  ],
+  "summary": {
+    "totalInputRecords": 98215624,
+    "totalOutputRecords": 81256349,
+    "numFailedStages": 1,
+    "totalGCOverheadPercent": 23.8,
+    "totalCpuUtilization": 0.42,
+    "totalMemorySpillGB": 1.52,
+    "totalDiskSpillGB": 1.31
+  }
+}
