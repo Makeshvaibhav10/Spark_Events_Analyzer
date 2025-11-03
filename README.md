@@ -1,66 +1,124 @@
+Phase 1: Parser Development
 
-# Spark Event Analyzer
+✅ Achievements:
 
-A high-performance, explainable analytics engine that consumes parsed Spark event log data and produces in-depth performance diagnostics, failure analysis, and root-cause reasoning for long-running Spark applications.
+Implemented a robust Spark event log parser in parser.py.
 
-## Features
+Capable of handling large, multi-hour event logs efficiently.
 
-- **Metrics Aggregation**: Computes application-level and stage-level statistics for CPU, memory, I/O, shuffle, and GC.
-- **Performance Bottleneck Detection**: Dynamically detects performance inefficiencies such as GC overhead, memory pressure, data skew, and more.
-- **Failure Analysis**: Identifies and classifies job, stage, and task failures.
-- **Root Cause Reasoning**: Infers the most probable root cause of performance issues and provides recommendations for optimization.
-- **JSON Report**: Generates a comprehensive JSON report of the analysis.
+Supports reading JSON, GZIP, and plain-text Spark event logs.
 
-## Architecture
+Extracted structured information for:
 
-The analyzer is composed of the following modules:
+Application, jobs, stages, and tasks.
 
-- **`parser.py`**: A streaming parser for Apache Spark event logs.
-- **`metrics_engine.py`**: A metrics computation module that uses pandas for efficient metric summarization.
-- **`analyzer.py`**: The main analysis engine that consumes parsed data and produces performance diagnostics.
-- **`root_cause_engine.py`**: A dynamic reasoning engine that infers the root cause of performance issues.
-- **`report_generator.py`**: A report generator that produces a comprehensive JSON report of the analysis.
+Executor metrics (CPU, memory, GC, shuffle I/O, spill metrics, etc.)
 
-## How to Use
+Task-level failures and exceptions.
 
-1. **Parse a Spark event log:**
+Designed parsing to be modular and stream-based — avoids memory overload for big logs.
 
-   ```bash
-   python -m spark_event_analyzer.parser --input /path/to/event_log --output /path/to/parsed_log.json
-   ```
+💡 Design Rationale:
 
-2. **Analyze the parsed log:**
+Using Spark’s official event log schema ensured schema compliance.
 
-   ```python
-   import json
-   from spark_event_analyzer.analyzer import analyze_events
-   from spark_event_analyzer.root_cause_engine import determine_root_cause
-   from spark_event_analyzer.report_generator import generate_report
+Stream-based parsing enables scalability for large logs (multi-GB).
 
-   with open('/path/to/parsed_log.json', 'r') as f:
-       events = json.load(f)
+Modular structure allows incremental extension for new Spark metrics or versions.
 
-   analysis = analyze_events(events)
-   root_causes = determine_root_cause(analysis)
-   generate_report(analysis, root_causes, '/path/to/report')
-   ```
+🔍 Phase 2: Analyzer Development
 
-## Output
+✅ Achievements:
 
-The analyzer generates a JSON report with the following structure:
+Built a performance and failure analysis engine (analyzer.py, metrics_engine.py).
 
-```json
-{
-    "summary": {
-        "total_jobs": 0,
-        "total_stages": 0,
-        "total_tasks": 0,
-        "total_runtime": "0h 0m 0s"
-    },
-    "performance_summary": {},
-    "bottlenecks": [],
-    "failures": [],
-    "root_cause_analysis": [],
-    "recommendations": []
-}
-```
+Implemented detection of:
+
+Performance bottlenecks (CPU, GC, shuffle, spill).
+
+Stage-level inefficiencies and anomalies.
+
+Job and stage-level failures with severity scoring.
+
+Added Root Cause Analytics (RCA):
+
+Maps issues to specific stages, tasks, and transformations (join, aggregateByKey, etc.).
+
+Generates cause chains — e.g.,
+Stage 35 failed → Executor lost → High GC time → Memory spill → Insufficient executor memory.
+
+Summarizes performance metrics across:
+
+CPU utilization
+
+Memory usage
+
+GC overhead
+
+Shuffle read/write
+
+Spill and I/O stats
+
+Produces multi-format reports:
+
+JSON (for API integration)
+
+Markdown (for documentation)
+
+Text summary (for CLI)
+
+Root cause text chain output
+
+Integrated dynamic correlation engine:
+
+Computes correlations between GC %, spill, duration, and failures.
+
+Confidence scoring for probable causes.
+
+💡 Design Rationale:
+
+Metrics correlation helps move from “symptom detection” → “reasoning-based insights”.
+
+Structured outputs allow integration with monitoring dashboards.
+
+Report generation provides human + machine readability.
+
+Modular analyzer layers let you plug in ML or pattern-based detectors later.
+
+🧠 Enhanced RCA Add-On (Phase 2.5)
+
+✅ Achievements:
+
+Added functionality to:
+
+Map performance issues to transformations (e.g., join, groupBy).
+
+Provide interactive root cause exploration:
+
+When a stage fails → correlate metrics (GC %, spill, task durations).
+
+Highlight “probable cause chain” automatically.
+
+Detected stage 35 join failure due to FetchFailedException (OOM) successfully.
+
+Chain confidence scoring (e.g., 95%) now included in output.
+
+💡 Design Rationale:
+
+Enables human-style debugging context — not just logs, but reasoned explanations.
+
+Bridges raw metrics → root cause → actionable recommendation.
+
+Essential groundwork for Phase 3 (AI-based adaptive reasoning).
+
+🧩 Core Outcome So Far
+
+✅ Fully working MVP covering:
+
+End-to-end parsing → metrics computation → bottleneck detection → root cause analysis.
+
+Handles large production logs efficiently.
+
+Produces actionable, structured performance diagnostics.
+
+All implemented 100% in Python, test-driven, and modularized.

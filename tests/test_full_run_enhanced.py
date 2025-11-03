@@ -1,6 +1,8 @@
 import unittest
 import json
 import os
+import sys
+sys.path.insert(0, '.')
 from typing import Dict
 from spark_event_analyzer.parser import parse_event_log
 from spark_event_analyzer.analyzer import analyze_events
@@ -19,7 +21,7 @@ class TestFullRunEnhanced(unittest.TestCase):
         output_dir = '/Users/makeshvaibhav/Desktop/spark-event-analyzer/tests/output'
         os.makedirs(output_dir, exist_ok=True)
 
-        log_file = '/Users/makeshvaibhav/Desktop/spark-event-analyzer/tests/sample_logs/sample_log_enhanced.json'
+        log_file = '/Users/makeshvaibhav/Desktop/spark-event-analyzer/spark-event-file.json'
         
         print("\n" + "="*80)
         print("SPARK EVENT ANALYZER - ENHANCED PHASE 2+ FULL RUN TEST")

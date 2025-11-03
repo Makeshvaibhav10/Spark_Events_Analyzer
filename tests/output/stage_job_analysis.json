@@ -1,0 +1,299 @@
+{
+  "stage_summary": {
+    "total_stages": 3,
+    "failed_stages": 0,
+    "stages_with_issues": 3,
+    "healthy_stages": 0,
+    "total_duration_ms": 9950,
+    "total_duration_formatted": "9.9s"
+  },
+  "job_summary": {
+    "total_jobs": 0,
+    "failed_jobs": 0,
+    "successful_jobs": 0
+  },
+  "stage_details": {
+    "1": {
+      "stage_id": 1,
+      "stage_name": "",
+      "stage_attempt": 0,
+      "status": "SUCCESS",
+      "transformation": {
+        "type": "unknown",
+        "operation": "unknown",
+        "stage_name": "",
+        "rdd_names": [],
+        "is_shuffle_stage": false,
+        "is_wide_transformation": false
+      },
+      "metrics": {
+        "total_tasks": 5,
+        "total_duration_ms": 6300,
+        "mean_task_duration_ms": 1260.0,
+        "max_task_duration_ms": 4000,
+        "min_task_duration_ms": 100,
+        "task_skew": 3.0952380952380953,
+        "total_gc_time_ms": 0,
+        "gc_ratio": 0.0,
+        "total_memory_spilled": 0,
+        "total_shuffle_read": 0,
+        "shuffle_ratio": 0
+      },
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "HIGH",
+          "description": "Data skew detected: task duration variance 309.5%",
+          "metric": "task_skew",
+          "value": 3.0952380952380953
+        },
+        {
+          "type": "STRAGGLER_TASKS",
+          "severity": "MEDIUM",
+          "description": "Straggler tasks detected: max task is 3.2x slower than mean",
+          "metric": "max_vs_mean_ratio",
+          "value": 3.1746031746031744
+        }
+      ],
+      "parent_stages": [],
+      "task_details": {
+        "total_tasks": 5,
+        "unique_executors": 3,
+        "locality_distribution": {
+          "NODE_LOCAL": 4,
+          "PROCESS_LOCAL": 1
+        },
+        "speculative_tasks": 1
+      },
+      "failure_reason": null
+    },
+    "2": {
+      "stage_id": 2,
+      "stage_name": "",
+      "stage_attempt": 0,
+      "status": "SUCCESS",
+      "transformation": {
+        "type": "unknown",
+        "operation": "unknown",
+        "stage_name": "",
+        "rdd_names": [],
+        "is_shuffle_stage": false,
+        "is_wide_transformation": false
+      },
+      "metrics": {
+        "total_tasks": 3,
+        "total_duration_ms": 2550,
+        "mean_task_duration_ms": 850.0,
+        "max_task_duration_ms": 1500,
+        "min_task_duration_ms": 350,
+        "task_skew": 1.3529411764705883,
+        "total_gc_time_ms": 0,
+        "gc_ratio": 0.0,
+        "total_memory_spilled": 0,
+        "total_shuffle_read": 0,
+        "shuffle_ratio": 0
+      },
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "HIGH",
+          "description": "Data skew detected: task duration variance 135.3%",
+          "metric": "task_skew",
+          "value": 1.3529411764705883
+        }
+      ],
+      "parent_stages": [
+        1
+      ],
+      "task_details": {
+        "total_tasks": 3,
+        "unique_executors": 3,
+        "locality_distribution": {
+          "PROCESS_LOCAL": 3
+        },
+        "speculative_tasks": 0
+      },
+      "failure_reason": null
+    },
+    "3": {
+      "stage_id": 3,
+      "stage_name": "",
+      "stage_attempt": 0,
+      "status": "SUCCESS",
+      "transformation": {
+        "type": "unknown",
+        "operation": "unknown",
+        "stage_name": "",
+        "rdd_names": [],
+        "is_shuffle_stage": false,
+        "is_wide_transformation": false
+      },
+      "metrics": {
+        "total_tasks": 2,
+        "total_duration_ms": 1100,
+        "mean_task_duration_ms": 550.0,
+        "max_task_duration_ms": 800,
+        "min_task_duration_ms": 300,
+        "task_skew": 0.9090909090909091,
+        "total_gc_time_ms": 0,
+        "gc_ratio": 0.0,
+        "total_memory_spilled": 0,
+        "total_shuffle_read": 0,
+        "shuffle_ratio": 0
+      },
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "MEDIUM",
+          "description": "Data skew detected: task duration variance 90.9%",
+          "metric": "task_skew",
+          "value": 0.9090909090909091
+        }
+      ],
+      "parent_stages": [
+        2
+      ],
+      "task_details": {
+        "total_tasks": 2,
+        "unique_executors": 2,
+        "locality_distribution": {
+          "PROCESS_LOCAL": 2
+        },
+        "speculative_tasks": 0
+      },
+      "failure_reason": null
+    }
+  },
+  "job_details": {},
+  "problematic_transformations": [
+    {
+      "stage_id": 3,
+      "stage_name": "",
+      "transformation_type": "unknown",
+      "operation": "unknown",
+      "is_wide_transformation": false,
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "MEDIUM",
+          "description": "Data skew detected: task duration variance 90.9%",
+          "metric": "task_skew",
+          "value": 0.9090909090909091
+        }
+      ],
+      "severity": "MEDIUM"
+    },
+    {
+      "stage_id": 1,
+      "stage_name": "",
+      "transformation_type": "unknown",
+      "operation": "unknown",
+      "is_wide_transformation": false,
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "HIGH",
+          "description": "Data skew detected: task duration variance 309.5%",
+          "metric": "task_skew",
+          "value": 3.0952380952380953
+        },
+        {
+          "type": "STRAGGLER_TASKS",
+          "severity": "MEDIUM",
+          "description": "Straggler tasks detected: max task is 3.2x slower than mean",
+          "metric": "max_vs_mean_ratio",
+          "value": 3.1746031746031744
+        }
+      ],
+      "severity": "HIGH"
+    },
+    {
+      "stage_id": 2,
+      "stage_name": "",
+      "transformation_type": "unknown",
+      "operation": "unknown",
+      "is_wide_transformation": false,
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "HIGH",
+          "description": "Data skew detected: task duration variance 135.3%",
+          "metric": "task_skew",
+          "value": 1.3529411764705883
+        }
+      ],
+      "severity": "HIGH"
+    }
+  ],
+  "bottleneck_mapping": {
+    "gc_pressure_stages": [],
+    "data_skew_stages": [
+      1,
+      2,
+      3
+    ],
+    "memory_spill_stages": [],
+    "shuffle_heavy_stages": [],
+    "failed_stages": []
+  },
+  "performance_hotspots": [
+    {
+      "stage_id": 1,
+      "stage_name": "",
+      "duration_ms": 6300,
+      "duration_formatted": "6.3s",
+      "task_count": 5,
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "HIGH",
+          "description": "Data skew detected: task duration variance 309.5%",
+          "metric": "task_skew",
+          "value": 3.0952380952380953
+        },
+        {
+          "type": "STRAGGLER_TASKS",
+          "severity": "MEDIUM",
+          "description": "Straggler tasks detected: max task is 3.2x slower than mean",
+          "metric": "max_vs_mean_ratio",
+          "value": 3.1746031746031744
+        }
+      ],
+      "transformation": "unknown"
+    },
+    {
+      "stage_id": 2,
+      "stage_name": "",
+      "duration_ms": 2550,
+      "duration_formatted": "2.5s",
+      "task_count": 3,
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "HIGH",
+          "description": "Data skew detected: task duration variance 135.3%",
+          "metric": "task_skew",
+          "value": 1.3529411764705883
+        }
+      ],
+      "transformation": "unknown"
+    },
+    {
+      "stage_id": 3,
+      "stage_name": "",
+      "duration_ms": 1100,
+      "duration_formatted": "1.1s",
+      "task_count": 2,
+      "issues": [
+        {
+          "type": "DATA_SKEW",
+          "severity": "MEDIUM",
+          "description": "Data skew detected: task duration variance 90.9%",
+          "metric": "task_skew",
+          "value": 0.9090909090909091
+        }
+      ],
+      "transformation": "unknown"
+    }
+  ]
+}

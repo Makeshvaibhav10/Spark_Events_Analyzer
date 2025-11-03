@@ -1,0 +1,36 @@
+================================================================================
+SPARK EVENT ANALYZER - COMPREHENSIVE PERFORMANCE REPORT
+================================================================================
+
+EXECUTIVE SUMMARY
+--------------------------------------------------------------------------------
+Health Status: GOOD (80/100)
+Total Bottlenecks: 1
+Critical Issues: 1
+High Priority Issues: 0
+
+*** IMMEDIATE ACTION REQUIRED ***
+
+APPLICATION OVERVIEW
+--------------------------------------------------------------------------------
+Total Jobs: 0
+Total Stages: 3
+Total Tasks: 10
+Total Duration: 0ms
+
+KEY PERFORMANCE INDICATORS
+--------------------------------------------------------------------------------
+CPU Efficiency: 11161616161.62%
+GC Overhead: 4.04% (LOW)
+Shuffle Efficiency: 0
+Memory Spilled: 0.00 B
+
+IDENTIFIED BOTTLENECKS (1)
+--------------------------------------------------------------------------------
+1. DATA_SKEW [CRITICAL] - Confidence: 78%
+   Impact: Task duration variance is 117.0% of mean, with 0.0% straggler tasks
+   Data skew causing uneven partition distribution. Task duration variance is 117.0% of mean, 0.0% of tasks are stragglers. P99 task is 6.9x slower than median. Indicates severe partition imbalance requi...
+
+================================================================================
+Report generated: 2025-11-03T18:10:16.831847
+================================================================================
