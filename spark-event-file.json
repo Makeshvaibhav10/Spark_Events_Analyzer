@@ -1,0 +1,611 @@
+[
+  {
+    "Event": "SparkListenerApplicationStart",
+    "App Name": "SyntheticStressApp",
+    "App ID": "application_1730619000000_9001",
+    "Timestamp": 1730619000000,
+    "User": "makeshvaibhav",
+    "App Attempt ID": null,
+    "Spark Version": "3.5.1"
+  },
+  {
+    "Event": "SparkListenerExecutorAdded",
+    "Timestamp": 1730619000200,
+    "Executor ID": "exec-1",
+    "Executor Info": {
+      "Host": "10.0.0.11",
+      "Total Cores": 4,
+      "Log Urls": {"stdout": "http://10.0.0.11:4040/logs/stdout", "stderr": "http://10.0.0.11:4040/logs/stderr"},
+      "Attributes": {},
+      "Resource Profile Id": 0
+    }
+  },
+  {
+    "Event": "SparkListenerExecutorAdded",
+    "Timestamp": 1730619000400,
+    "Executor ID": "exec-2",
+    "Executor Info": {
+      "Host": "10.0.0.12",
+      "Total Cores": 4,
+      "Log Urls": {"stdout": "http://10.0.0.12:4040/logs/stdout", "stderr": "http://10.0.0.12:4040/logs/stderr"},
+      "Attributes": {},
+      "Resource Profile Id": 0
+    }
+  },
+  {
+    "Event": "SparkListenerExecutorAdded",
+    "Timestamp": 1730619000600,
+    "Executor ID": "exec-3",
+    "Executor Info": {
+      "Host": "10.0.0.13",
+      "Total Cores": 2,
+      "Log Urls": {"stdout": "http://10.0.0.13:4040/logs/stdout", "stderr": "http://10.0.0.13:4040/logs/stderr"},
+      "Attributes": {},
+      "Resource Profile Id": 0
+    }
+  },
+  {
+    "Event": "SparkListenerBlockManagerAdded",
+    "Timestamp": 1730619000700,
+    "Block Manager ID": {"Executor ID": "exec-1", "Host": "10.0.0.11", "Port": 37400},
+    "Maximum OnHeap Memory": 2147483648,
+    "Maximum OffHeap Memory": 0
+  },
+  {
+    "Event": "SparkListenerBlockManagerAdded",
+    "Timestamp": 1730619000800,
+    "Block Manager ID": {"Executor ID": "exec-2", "Host": "10.0.0.12", "Port": 37400},
+    "Maximum OnHeap Memory": 2147483648,
+    "Maximum OffHeap Memory": 0
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 1,
+      "Stage Attempt ID": 0,
+      "Name": "read_and_map at ETLJob.scala:30",
+      "Number of Tasks": 4,
+      "RDD Info": [],
+      "Parent IDs": [],
+      "Details": "Stage 1 - read files and map"
+    },
+    "Timestamp": 1730619001000
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 11,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1730619001100,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "NODE_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 11,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1730619001100,
+      "Finish Time": 1730619002600,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "NODE_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 200000000,
+      "JVMOffHeapMemory": 0,
+      "Executor CPU Time": 120000000000,
+      "Executor Run Time": 1500,
+      "Result Size": 4096,
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 500000, "Shuffle Write Time": 120, "Shuffle Records Written": 5000},
+      "Input Metrics": {"Bytes Read": 5000000, "Records Read": 10000},
+      "Output Metrics": {"Bytes Written": 2000, "Records Written": 200}
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 12,
+      "Index": 1,
+      "Attempt": 0,
+      "Partition ID": 1,
+      "Launch Time": 1730619001150,
+      "Executor ID": "exec-2",
+      "Host": "10.0.0.12",
+      "Locality": "NODE_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 12,
+      "Index": 1,
+      "Attempt": 0,
+      "Partition ID": 1,
+      "Launch Time": 1730619001150,
+      "Finish Time": 1730619005150,
+      "Executor ID": "exec-2",
+      "Host": "10.0.0.12",
+      "Locality": "NODE_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 400000000,
+      "JVMOffHeapMemory": 0,
+      "Executor CPU Time": 500000000000,
+      "Executor Run Time": 4000,
+      "Result Size": 65536,
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 50000000, "Shuffle Write Time": 1200, "Shuffle Records Written": 200000},
+      "Input Metrics": {"Bytes Read": 80000000, "Records Read": 1000000},
+      "Output Metrics": {"Bytes Written": 10000, "Records Written": 500}
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 13,
+      "Index": 2,
+      "Attempt": 0,
+      "Partition ID": 2,
+      "Launch Time": 1730619001200,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "NODE_LOCAL",
+      "Speculative": true
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 13,
+      "Index": 2,
+      "Attempt": 0,
+      "Partition ID": 2,
+      "Launch Time": 1730619001200,
+      "Finish Time": 1730619001600,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "NODE_LOCAL",
+      "Speculative": true,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 180000000,
+      "JVMOffHeapMemory": 0,
+      "Executor CPU Time": 70000000000,
+      "Executor Run Time": 400,
+      "Result Size": 2048,
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 10000, "Shuffle Write Time": 30, "Shuffle Records Written": 1000},
+      "Input Metrics": {"Bytes Read": 2000000, "Records Read": 50000},
+      "Output Metrics": {"Bytes Written": 500, "Records Written": 50}
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 14,
+      "Index": 3,
+      "Attempt": 0,
+      "Partition ID": 3,
+      "Launch Time": 1730619001250,
+      "Executor ID": "exec-3",
+      "Host": "10.0.0.13",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "FetchFailed", "Message": "Block lost on executor exec-2"},
+    "Task Info": {
+      "Task ID": 14,
+      "Index": 3,
+      "Attempt": 0,
+      "Partition ID": 3,
+      "Launch Time": 1730619001250,
+      "Finish Time": 1730619001350,
+      "Executor ID": "exec-3",
+      "Host": "10.0.0.13",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": true,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 120000000,
+      "Executor CPU Time": 5000000000,
+      "Executor Run Time": 100,
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 0, "Shuffle Write Time": 0, "Shuffle Records Written": 0},
+      "Input Metrics": {"Bytes Read": 100000, "Records Read": 1000},
+      "Output Metrics": {"Bytes Written": 0, "Records Written": 0}
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 1,
+    "Stage Attempt ID": 1,
+    "Task Info": {
+      "Task ID": 14,
+      "Index": 3,
+      "Attempt": 1,
+      "Partition ID": 3,
+      "Launch Time": 1730619001400,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "NODE_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 1,
+    "Stage Attempt ID": 1,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 14,
+      "Index": 3,
+      "Attempt": 1,
+      "Partition ID": 3,
+      "Launch Time": 1730619001400,
+      "Finish Time": 1730619001700,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "NODE_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 210000000,
+      "Executor CPU Time": 50000000000,
+      "Executor Run Time": 300,
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 300000, "Shuffle Write Time": 200, "Shuffle Records Written": 15000},
+      "Input Metrics": {"Bytes Read": 4000000, "Records Read": 80000},
+      "Output Metrics": {"Bytes Written": 1000, "Records Written": 80}
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 1,
+      "Stage Attempt ID": 1,
+      "Name": "read_and_map at ETLJob.scala:30",
+      "Number of Tasks": 4,
+      "Completion Time": 1730619005200
+    }
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 2,
+      "Stage Attempt ID": 0,
+      "Name": "shuffle_reduce at ETLJob.scala:78",
+      "Number of Tasks": 3,
+      "RDD Info": [],
+      "Parent IDs": [1],
+      "Details": "Stage 2 - reduce by key after shuffle"
+    },
+    "Timestamp": 1730619005300
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 2,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 21,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1730619005400,
+      "Executor ID": "exec-2",
+      "Host": "10.0.0.12",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 2,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 21,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1730619005400,
+      "Finish Time": 1730619006100,
+      "Executor ID": "exec-2",
+      "Host": "10.0.0.12",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 190000000,
+      "Executor CPU Time": 90000000000,
+      "Executor Run Time": 700,
+      "Result Size": 3000,
+      "Shuffle Read Metrics": {"Remote Bytes Read": 20000000, "Local Bytes Read": 2000000, "Records Read": 120000},
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 1000, "Shuffle Write Time": 10, "Shuffle Records Written": 30},
+      "Input Metrics": {"Bytes Read": 0, "Records Read": 0},
+      "Output Metrics": {"Bytes Written": 1000, "Records Written": 30}
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 2,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 22,
+      "Index": 1,
+      "Attempt": 0,
+      "Partition ID": 1,
+      "Launch Time": 1730619005450,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 2,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 22,
+      "Index": 1,
+      "Attempt": 0,
+      "Partition ID": 1,
+      "Launch Time": 1730619005450,
+      "Finish Time": 1730619006950,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 600000000,
+      "Executor CPU Time": 150000000000,
+      "Executor Run Time": 1500,
+      "JVM GC Time": 400,
+      "MinorGCCount": 4,
+      "MajorGCCount": 1,
+      "TotalGCTime": 400,
+      "Shuffle Read Metrics": {"Remote Bytes Read": 10000000, "Local Bytes Read": 1000000, "Records Read": 60000},
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 500, "Shuffle Write Time": 5, "Shuffle Records Written": 20},
+      "Input Metrics": {"Bytes Read": 0, "Records Read": 0},
+      "Output Metrics": {"Bytes Written": 2000, "Records Written": 60}
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 2,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 23,
+      "Index": 2,
+      "Attempt": 0,
+      "Partition ID": 2,
+      "Launch Time": 1730619005500,
+      "Executor ID": "exec-3",
+      "Host": "10.0.0.13",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 2,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 23,
+      "Index": 2,
+      "Attempt": 0,
+      "Partition ID": 2,
+      "Launch Time": 1730619005500,
+      "Finish Time": 1730619005850,
+      "Executor ID": "exec-3",
+      "Host": "10.0.0.13",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 120000000,
+      "Executor CPU Time": 20000000000,
+      "Executor Run Time": 300,
+      "Shuffle Read Metrics": {"Remote Bytes Read": 1000000, "Local Bytes Read": 200000, "Records Read": 5000},
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 0, "Shuffle Write Time": 0, "Shuffle Records Written": 0},
+      "Input Metrics": {"Bytes Read": 0, "Records Read": 0},
+      "Output Metrics": {"Bytes Written": 500, "Records Written": 10}
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 2,
+      "Stage Attempt ID": 0,
+      "Name": "shuffle_reduce at ETLJob.scala:78",
+      "Number of Tasks": 3,
+      "Completion Time": 1730619007100
+    }
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 3,
+      "Stage Attempt ID": 0,
+      "Name": "write_sink at ETLJob.scala:120",
+      "Number of Tasks": 2,
+      "RDD Info": [],
+      "Parent IDs": [2],
+      "Details": "Stage 3 - write results to sink"
+    },
+    "Timestamp": 1730619007200
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 3,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 31,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1730619007300,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 3,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 31,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1730619007300,
+      "Finish Time": 1730619007600,
+      "Executor ID": "exec-1",
+      "Host": "10.0.0.11",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 200000000,
+      "Executor CPU Time": 40000000000,
+      "Executor Run Time": 300,
+      "Result Size": 1024,
+      "Input Metrics": {"Bytes Read": 0, "Records Read": 0},
+      "Output Metrics": {"Bytes Written": 8000000, "Records Written": 100000}
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 3,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 32,
+      "Index": 1,
+      "Attempt": 0,
+      "Partition ID": 1,
+      "Launch Time": 1730619007350,
+      "Executor ID": "exec-2",
+      "Host": "10.0.0.12",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 3,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {"Reason": "Success"},
+    "Task Info": {
+      "Task ID": 32,
+      "Index": 1,
+      "Attempt": 0,
+      "Partition ID": 1,
+      "Launch Time": 1730619007350,
+      "Finish Time": 1730619008150,
+      "Executor ID": "exec-2",
+      "Host": "10.0.0.12",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 300000000,
+      "Executor CPU Time": 60000000000,
+      "Executor Run Time": 800,
+      "Result Size": 4096,
+      "Shuffle Write Metrics": {"Shuffle Bytes Written": 0, "Shuffle Write Time": 0, "Shuffle Records Written": 0},
+      "Input Metrics": {"Bytes Read": 0, "Records Read": 0},
+      "Output Metrics": {"Bytes Written": 0, "Records Written": 0},
+      "Memory Spill Metrics": {"Spilled Bytes": 12000000, "Spilled Records": 120000}
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 3,
+      "Stage Attempt ID": 0,
+      "Name": "write_sink at ETLJob.scala:120",
+      "Number of Tasks": 2,
+      "Completion Time": 1730619008250
+    }
+  },
+  {
+    "Event": "SparkListenerExecutorRemoved",
+    "Timestamp": 1730619009000,
+    "Executor ID": "exec-3",
+    "Removed Reason": "Executor lost due to heartbeat timeout"
+  },
+  {
+    "Event": "SparkListenerBlockManagerRemoved",
+    "Timestamp": 1730619009100,
+    "Block Manager ID": {"Executor ID": "exec-3", "Host": "10.0.0.13", "Port": 37400}
+  },
+  {
+    "Event": "SparkListenerApplicationEnd",
+    "Timestamp": 1730619010000
+  }
+]

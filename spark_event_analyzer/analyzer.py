@@ -1,11 +1,8 @@
 """
-Enhanced Analyzer Module with Correlation-Based Bottleneck Detection
+Standardized Bottleneck Analyzer
 
-This module analyzes Spark metrics to identify bottlenecks using:
-- Correlation analysis between metrics
-- Dynamic confidence scoring
-- Severity classification
-- Detailed reasoning generation
+Analyzes Spark metrics using the new schema to identify bottlenecks
+with correlation-based detection and confidence scoring.
 """
 
 from typing import Dict, Any, List
@@ -14,6 +11,7 @@ import logging
 import math
 
 logger = logging.getLogger(__name__)
+
 
 class BottleneckAnalyzer:
     """Enhanced analyzer with correlation-based bottleneck detection."""
@@ -28,7 +26,7 @@ class BottleneckAnalyzer:
     
     def analyze_events(self, events: List[Dict[str, Any]]) -> Dict[str, Any]:
         """
-        Analyzes Spark event logs with correlation-based bottleneck detection.
+        Analyze Spark events with correlation-based bottleneck detection.
         
         Args:
             events: List of Spark events as dictionaries
@@ -36,9 +34,10 @@ class BottleneckAnalyzer:
         Returns:
             Comprehensive analysis with bottlenecks, correlations, and insights
         """
+        # Compute metrics using standardized engine
         metrics = compute_metrics(events)
         
-        # Detect bottlenecks with correlation analysis
+        # Detect bottlenecks
         bottlenecks = []
         bottlenecks.extend(self._detect_gc_pressure(metrics))
         bottlenecks.extend(self._detect_data_skew(metrics))
@@ -50,7 +49,7 @@ class BottleneckAnalyzer:
         # Detect anomalies and failures
         anomalies = self._detect_anomalies(metrics)
         
-        # Generate warnings for moderate issues
+        # Generate warnings
         warnings = self._generate_warnings(metrics)
         
         # Sort bottlenecks by severity and confidence
@@ -73,7 +72,7 @@ class BottleneckAnalyzer:
         }
     
     def _detect_gc_pressure(self, metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Detect GC pressure with correlation analysis: GC↑ + Spill↑ → Memory Pressure."""
+        """Detect GC pressure using standardized metrics."""
         memory_metrics = metrics.get('memory_metrics', {})
         correlations = metrics.get('correlations', {})
         
@@ -81,17 +80,13 @@ class BottleneckAnalyzer:
         memory_spilled = memory_metrics.get('memoryBytesSpilled', 0)
         gc_pressure_level = memory_metrics.get('gc_pressure_level', 'LOW')
         
-        # Correlation strength between GC and memory spill
         spill_gc_correlation = abs(correlations.get('spill_vs_gc', 0))
         
         bottlenecks = []
         
-        if gc_ratio > 0.1:  # Dynamic threshold
-            # Compute confidence based on multiple factors
-            impact_score = min(gc_ratio * 2, 1.0)  # Higher GC = higher impact
+        if gc_ratio > 0.1:
+            impact_score = min(gc_ratio * 2, 1.0)
             correlation_strength = spill_gc_correlation
-            
-            # Check for memory spill as supporting evidence
             has_spill_evidence = memory_spilled > 0
             
             confidence = self._compute_confidence(
@@ -102,12 +97,17 @@ class BottleneckAnalyzer:
             
             severity = "CRITICAL" if gc_ratio > 0.4 else "HIGH" if gc_ratio > 0.2 else "MEDIUM"
             
-            reasoning = self._generate_gc_reasoning(
-                gc_ratio=gc_ratio,
-                memory_spilled=memory_spilled,
-                correlation=spill_gc_correlation,
-                pressure_level=gc_pressure_level
+            reasoning = (
+                f"Memory pressure detected with {gc_pressure_level.lower()} GC overhead. "
+                f"GC consumes {gc_ratio*100:.1f}% of executor runtime. "
             )
+            
+            if memory_spilled > 0:
+                reasoning += f"Supporting evidence: {self._format_bytes(memory_spilled)} spilled to disk"
+                if correlation_strength > 0.5:
+                    reasoning += f" (strong correlation: {correlation_strength:.2f})"
+            
+            reasoning += ". Confidence based on GC impact severity and correlation with memory metrics."
             
             bottlenecks.append({
                 "bottleneck": "GC Overhead / Memory Pressure",
@@ -134,9 +134,8 @@ class BottleneckAnalyzer:
         return bottlenecks
     
     def _detect_data_skew(self, metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Detect data skew using percentile analysis and variance."""
+        """Detect data skew using statistical analysis."""
         task_metrics = metrics.get('task_metrics', {})
-        thresholds = metrics.get('thresholds', {})
         
         task_skew = task_metrics.get('task_skew_ratio', 0)
         stragglers_pct = task_metrics.get('stragglers_percentage', 0)
@@ -144,7 +143,6 @@ class BottleneckAnalyzer:
         
         bottlenecks = []
         
-        # Use dynamic thresholds
         if task_skew > 0.3 or stragglers_pct > 5:
             impact_score = min(task_skew, 1.0)
             
@@ -156,11 +154,20 @@ class BottleneckAnalyzer:
             
             severity = "CRITICAL" if task_skew > 1.0 else "HIGH" if task_skew > 0.5 else "MEDIUM"
             
-            reasoning = self._generate_skew_reasoning(
-                task_skew=task_skew,
-                stragglers_pct=stragglers_pct,
-                percentiles=task_metrics.get('percentiles', {})
+            percentiles = task_metrics.get('percentiles', {})
+            reasoning = (
+                f"Data skew causing uneven partition distribution. "
+                f"Task duration variance is {task_skew*100:.1f}% of mean, "
+                f"{stragglers_pct:.1f}% of tasks are stragglers. "
             )
+            
+            p99 = percentiles.get('p99', 0)
+            p50 = percentiles.get('p50', 0)
+            if p50 > 0:
+                ratio = p99 / p50
+                reasoning += f"P99 task is {ratio:.1f}x slower than median. "
+            
+            reasoning += "Indicates severe partition imbalance requiring repartitioning."
             
             bottlenecks.append({
                 "bottleneck": "Data Skew / Partition Imbalance",
@@ -176,7 +183,7 @@ class BottleneckAnalyzer:
                     "min_duration_ms": task_metrics.get('min_task_duration', 0),
                     "median_duration_ms": task_metrics.get('median_task_duration', 0),
                     "max_duration_ms": task_metrics.get('max_task_duration', 0),
-                    "p99_duration_ms": task_metrics.get('percentiles', {}).get('p99', 0)
+                    "p99_duration_ms": percentiles.get('p99', 0)
                 },
                 "reasoning": reasoning,
                 "impact": f"Task duration variance is {task_skew*100:.1f}% of mean, with {stragglers_pct:.1f}% straggler tasks"
@@ -185,10 +192,9 @@ class BottleneckAnalyzer:
         return bottlenecks
     
     def _detect_cpu_underuse(self, metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Detect CPU underutilization: CPU↓ + Shuffle↑ → I/O Bottleneck."""
+        """Detect CPU underutilization."""
         cpu_metrics = metrics.get('cpu_metrics', {})
         shuffle_metrics = metrics.get('shuffle_metrics', {})
-        correlations = metrics.get('correlations', {})
         
         cpu_eff = cpu_metrics.get('cpu_efficiency', 1)
         cpu_wait_ratio = cpu_metrics.get('cpu_wait_ratio', 0)
@@ -197,7 +203,6 @@ class BottleneckAnalyzer:
         bottlenecks = []
         
         if cpu_eff < 0.75:
-            # Check if low CPU correlates with high shuffle
             is_io_bottleneck = shuffle_ratio > 0.3
             
             impact_score = 1.0 - cpu_eff
@@ -213,11 +218,22 @@ class BottleneckAnalyzer:
             
             probable_cause = "I/O Bottleneck" if is_io_bottleneck else "CPU Underutilization"
             
-            reasoning = self._generate_cpu_reasoning(
-                cpu_eff=cpu_eff,
-                shuffle_ratio=shuffle_ratio,
-                is_io_bottleneck=is_io_bottleneck
+            reasoning = (
+                f"{'I/O bottleneck' if is_io_bottleneck else 'CPU underutilization'} "
+                f"with {(1-cpu_eff)*100:.1f}% CPU idle time. "
+                f"CPU efficiency is {cpu_eff*100:.1f}%"
             )
+            
+            if is_io_bottleneck:
+                reasoning += (
+                    f", shuffle operations consume {shuffle_ratio*100:.1f}% of time, "
+                    "indicating network/disk I/O saturation."
+                )
+            else:
+                reasoning += (
+                    ". Low CPU utilization without I/O pressure suggests "
+                    "serialization overhead or insufficient parallelism."
+                )
             
             bottlenecks.append({
                 "bottleneck": f"CPU Underutilization / {probable_cause}",
@@ -229,8 +245,7 @@ class BottleneckAnalyzer:
                     "cpu_efficiency": cpu_eff,
                     "cpu_utilization_percentage": f"{cpu_eff*100:.2f}%",
                     "cpu_wait_percentage": f"{cpu_wait_ratio*100:.2f}%",
-                    "shuffle_ratio": shuffle_ratio,
-                    "deserialize_overhead_percentage": cpu_metrics.get('deserialize_overhead_percentage', 0)
+                    "shuffle_ratio": shuffle_ratio
                 },
                 "correlation_evidence": {
                     "is_io_bottleneck": is_io_bottleneck,
@@ -243,7 +258,7 @@ class BottleneckAnalyzer:
         return bottlenecks
     
     def _detect_spill_events(self, metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Detect memory spill: Large Spill↑ + Reduced Memory → Insufficient Memory."""
+        """Detect memory spill events."""
         memory_metrics = metrics.get('memory_metrics', {})
         io_metrics = metrics.get('io_metrics', {})
         
@@ -256,7 +271,7 @@ class BottleneckAnalyzer:
         if memory_spilled > 0:
             spill_ratio = memory_spilled / total_input if total_input > 0 else 0
             
-            if spill_ratio > 0.05:  # 5% threshold
+            if spill_ratio > 0.05:
                 impact_score = min(spill_ratio * 2, 1.0)
                 
                 confidence = self._compute_confidence(
@@ -267,10 +282,17 @@ class BottleneckAnalyzer:
                 
                 severity = "CRITICAL" if spill_ratio > 0.3 else "HIGH" if spill_ratio > 0.1 else "MEDIUM"
                 
-                reasoning = self._generate_spill_reasoning(
-                    memory_spilled=memory_spilled,
-                    disk_spilled=disk_spilled,
-                    spill_ratio=spill_ratio
+                reasoning = (
+                    f"Insufficient executor memory causing data spill. "
+                    f"{self._format_bytes(memory_spilled)} spilled to memory"
+                )
+                
+                if disk_spilled > 0:
+                    reasoning += f", {self._format_bytes(disk_spilled)} spilled to disk"
+                
+                reasoning += (
+                    f" ({spill_ratio*100:.1f}% of input data). "
+                    "Indicates memory pressure requiring increased executor memory allocation."
                 )
                 
                 bottlenecks.append({
@@ -295,7 +317,7 @@ class BottleneckAnalyzer:
         return bottlenecks
     
     def _detect_shuffle_inefficiency(self, metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Detect shuffle inefficiency: Excessive Shuffle vs Total Data."""
+        """Detect shuffle inefficiency."""
         shuffle_metrics = metrics.get('shuffle_metrics', {})
         io_metrics = metrics.get('io_metrics', {})
         
@@ -319,10 +341,11 @@ class BottleneckAnalyzer:
             
             severity = "CRITICAL" if shuffle_ratio > 0.7 else "HIGH" if shuffle_ratio > 0.5 else "MEDIUM"
             
-            reasoning = self._generate_shuffle_reasoning(
-                shuffle_ratio=shuffle_ratio,
-                shuffle_intensity=shuffle_intensity,
-                shuffle_efficiency=shuffle_efficiency
+            reasoning = (
+                f"Excessive shuffle operations consuming {shuffle_ratio*100:.1f}% of execution time. "
+                f"Shuffle intensity is {shuffle_intensity:.2f}x the I/O volume, "
+                f"shuffle efficiency score is {shuffle_efficiency:.2f}. "
+                "Indicates need for broadcast joins or repartitioning strategy."
             )
             
             bottlenecks.append({
@@ -367,11 +390,19 @@ class BottleneckAnalyzer:
             
             severity = "HIGH" if imbalance_ratio > 0.6 else "MEDIUM"
             
-            reasoning = self._generate_imbalance_reasoning(
-                imbalance_ratio=imbalance_ratio,
-                load_imbalance_pct=load_imbalance_pct,
-                executor_counts=executor_metrics.get('executor_task_counts', {})
+            executor_counts = executor_metrics.get('executor_task_counts', {})
+            reasoning = (
+                f"Uneven task distribution across executors. "
+                f"Load variance is {imbalance_ratio:.2f}, "
+                f"imbalance is {load_imbalance_pct:.1f}%. "
             )
+            
+            if executor_counts:
+                min_tasks = min(executor_counts.values())
+                max_tasks = max(executor_counts.values())
+                reasoning += f"Max loaded executor has {max_tasks} tasks vs min {min_tasks}. "
+            
+            reasoning += "Suggests data skew or partitioning issues."
             
             bottlenecks.append({
                 "bottleneck": "Executor Load Imbalance",
@@ -394,7 +425,7 @@ class BottleneckAnalyzer:
         return bottlenecks
     
     def _detect_anomalies(self, metrics: Dict[str, Any]) -> List[Dict[str, Any]]:
-        """Detect anomalies and failures in the application."""
+        """Detect anomalies and failures."""
         stage_metrics = metrics.get('stage_metrics', {})
         
         anomalies = []
@@ -453,9 +484,9 @@ class BottleneckAnalyzer:
         
         return warnings
     
-    def _compute_confidence(self, impact_score: float, correlation_strength: float, 
+    def _compute_confidence(self, impact_score: float, correlation_strength: float,
                            has_supporting_evidence: bool) -> float:
-        """Compute confidence score using calibrated formula."""
+        """Compute confidence score."""
         base_confidence = 0.5
         
         # Sigmoid function for impact
@@ -476,93 +507,6 @@ class BottleneckAnalyzer:
         
         return min(max(confidence, 0.0), 1.0)
     
-    def _generate_gc_reasoning(self, gc_ratio: float, memory_spilled: int, 
-                               correlation: float, pressure_level: str) -> str:
-        """Generate reasoning text for GC pressure."""
-        reasoning = f"Probable Cause: Memory pressure due to {pressure_level.lower()} garbage collection overhead. "
-        reasoning += f"Supporting Evidence: GC consumes {gc_ratio*100:.1f}% of executor runtime"
-        
-        if memory_spilled > 0:
-            reasoning += f", {self._format_bytes(memory_spilled)} spilled to disk"
-            if correlation > 0.5:
-                reasoning += f" (strong correlation: {correlation:.2f})"
-        
-        reasoning += f". Confidence based on GC impact severity and correlation with memory metrics."
-        
-        return reasoning
-    
-    def _generate_skew_reasoning(self, task_skew: float, stragglers_pct: float, 
-                                 percentiles: Dict[str, float]) -> str:
-        """Generate reasoning text for data skew."""
-        reasoning = f"Probable Cause: Data skew causing uneven partition distribution. "
-        reasoning += f"Supporting Evidence: Task duration variance is {task_skew*100:.1f}% of mean, "
-        reasoning += f"{stragglers_pct:.1f}% of tasks are stragglers. "
-        
-        p99 = percentiles.get('p99', 0)
-        p50 = percentiles.get('p50', 0)
-        if p50 > 0:
-            ratio = p99 / p50
-            reasoning += f"P99 task is {ratio:.1f}x slower than median. "
-        
-        reasoning += "Indicates severe partition imbalance requiring repartitioning."
-        
-        return reasoning
-    
-    def _generate_cpu_reasoning(self, cpu_eff: float, shuffle_ratio: float, 
-                                is_io_bottleneck: bool) -> str:
-        """Generate reasoning text for CPU underutilization."""
-        reasoning = f"Probable Cause: {'I/O bottleneck' if is_io_bottleneck else 'CPU underutilization'} "
-        reasoning += f"with {(1-cpu_eff)*100:.1f}% CPU idle time. "
-        reasoning += f"Supporting Evidence: CPU efficiency is {cpu_eff*100:.1f}%"
-        
-        if is_io_bottleneck:
-            reasoning += f", shuffle operations consume {shuffle_ratio*100:.1f}% of time, "
-            reasoning += "indicating network/disk I/O saturation."
-        else:
-            reasoning += ". Low CPU utilization without I/O pressure suggests serialization overhead or insufficient parallelism."
-        
-        return reasoning
-    
-    def _generate_spill_reasoning(self, memory_spilled: int, disk_spilled: int, 
-                                  spill_ratio: float) -> str:
-        """Generate reasoning text for memory spill."""
-        reasoning = f"Probable Cause: Insufficient executor memory causing data spill. "
-        reasoning += f"Supporting Evidence: {self._format_bytes(memory_spilled)} spilled to memory"
-        
-        if disk_spilled > 0:
-            reasoning += f", {self._format_bytes(disk_spilled)} spilled to disk"
-        
-        reasoning += f" ({spill_ratio*100:.1f}% of input data). "
-        reasoning += "Indicates memory pressure requiring increased executor memory allocation."
-        
-        return reasoning
-    
-    def _generate_shuffle_reasoning(self, shuffle_ratio: float, shuffle_intensity: float, 
-                                    shuffle_efficiency: float) -> str:
-        """Generate reasoning text for shuffle inefficiency."""
-        reasoning = f"Probable Cause: Excessive shuffle operations consuming {shuffle_ratio*100:.1f}% of execution time. "
-        reasoning += f"Supporting Evidence: Shuffle intensity is {shuffle_intensity:.2f}x the I/O volume, "
-        reasoning += f"shuffle efficiency score is {shuffle_efficiency:.2f}. "
-        reasoning += "Indicates need for broadcast joins or repartitioning strategy."
-        
-        return reasoning
-    
-    def _generate_imbalance_reasoning(self, imbalance_ratio: float, load_imbalance_pct: float, 
-                                      executor_counts: Dict[str, int]) -> str:
-        """Generate reasoning text for executor imbalance."""
-        reasoning = f"Probable Cause: Uneven task distribution across executors. "
-        reasoning += f"Supporting Evidence: Load variance is {imbalance_ratio:.2f}, "
-        reasoning += f"imbalance is {load_imbalance_pct:.1f}%. "
-        
-        if executor_counts:
-            min_tasks = min(executor_counts.values())
-            max_tasks = max(executor_counts.values())
-            reasoning += f"Max loaded executor has {max_tasks} tasks vs min {min_tasks}. "
-        
-        reasoning += "Suggests data skew or partitioning issues."
-        
-        return reasoning
-    
     def _severity_order(self, severity: str) -> int:
         """Convert severity to numeric order for sorting."""
         order = {"CRITICAL": 0, "HIGH": 1, "MEDIUM": 2, "LOW": 3}
@@ -576,8 +520,9 @@ class BottleneckAnalyzer:
             bytes_val /= 1024.0
         return f"{bytes_val:.2f} PB"
 
+
 # Backward compatibility wrapper
 def analyze_events(events: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """Backward compatible analyze_events function."""
+    """Analyze events using BottleneckAnalyzer."""
     analyzer = BottleneckAnalyzer()
     return analyzer.analyze_events(events)

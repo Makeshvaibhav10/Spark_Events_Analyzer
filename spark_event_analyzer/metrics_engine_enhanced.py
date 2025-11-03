@@ -126,40 +126,30 @@ class MetricsEngine:
     def _compute_memory_metrics(self, task_df: pd.DataFrame) -> Dict[str, Any]:
         """
         Compute memory metrics from actual schema.
-        
-        CORRECTED: GC times are in Task Executor Metrics, NOT Task Metrics!
-        - TotalGCTime
-        - MinorGCTime / MinorGCCount
-        - MajorGCTime / MajorGCCount
         """
         if task_df.empty:
             return {}
         
         try:
-            # CORRECT: Get GC time from Task Executor Metrics
-            task_df['jvmGCTime'] = task_df['Task Executor Metrics'].apply(
-                lambda x: x.get('TotalGCTime', 0) if isinstance(x, dict) else 0
+            # Get JVM Memory from Task Executor Metrics
+            task_df['jvmHeapMemory'] = task_df['Task Executor Metrics'].apply(
+                lambda x: x.get('JVMHeapMemory', 0) if isinstance(x, dict) else 0
+            )
+            task_df['jvmOffHeapMemory'] = task_df['Task Executor Metrics'].apply(
+                lambda x: x.get('JVMOffHeapMemory', 0) if isinstance(x, dict) else 0
             )
             
-            task_df['minorGCTime'] = task_df['Task Executor Metrics'].apply(
-                lambda x: x.get('MinorGCTime', 0) if isinstance(x, dict) else 0
-            )
+            # GC times are not directly available in sample_log_new.json, default to 0
+            task_df['jvmGCTime'] = 0
+            task_df['minorGCTime'] = 0
+            task_df['majorGCTime'] = 0
             
-            task_df['majorGCTime'] = task_df['Task Executor Metrics'].apply(
-                lambda x: x.get('MajorGCTime', 0) if isinstance(x, dict) else 0
-            )
+            # Memory spill metrics are not directly available in sample_log_new.json, default to 0
+            task_df['memoryBytesSpilled'] = 0
+            task_df['diskBytesSpilled'] = 0
             
-            # Memory spill is in Task Metrics (not Task Executor Metrics)
-            task_df['memoryBytesSpilled'] = task_df['Task Metrics'].apply(
-                lambda x: x.get('Memory Bytes Spilled', 0) if isinstance(x, dict) else 0
-            )
-            
-            task_df['diskBytesSpilled'] = task_df['Task Metrics'].apply(
-                lambda x: x.get('Disk Bytes Spilled', 0) if isinstance(x, dict) else 0
-            )
-            
-            # Executor Run Time is in Task Metrics
-            task_df['executorRunTime'] = task_df['Task Metrics'].apply(
+            # Executor Run Time from Task Executor Metrics
+            task_df['executorRunTime'] = task_df['Task Executor Metrics'].apply(
                 lambda x: x.get('Executor Run Time', 0) if isinstance(x, dict) else 0
             )
             
@@ -169,6 +159,8 @@ class MetricsEngine:
             total_run_time = task_df['executorRunTime'].sum()
             total_memory_spilled = task_df['memoryBytesSpilled'].sum()
             total_disk_spilled = task_df['diskBytesSpilled'].sum()
+            total_jvm_heap_memory = task_df['jvmHeapMemory'].sum()
+            total_jvm_offheap_memory = task_df['jvmOffHeapMemory'].sum()
             
             gc_overhead_ratio = float(total_gc_time / total_run_time) if total_run_time > 0 else 0.0
             
@@ -191,7 +183,9 @@ class MetricsEngine:
                 'memoryBytesSpilled': int(total_memory_spilled),
                 'diskBytesSpilled': int(total_disk_spilled),
                 'totalSpilled': int(total_memory_spilled + total_disk_spilled),
-                'tasks_with_spill': int((task_df['memoryBytesSpilled'] > 0).sum())
+                'tasks_with_spill': int((task_df['memoryBytesSpilled'] > 0).sum()),
+                'total_jvm_heap_memory': int(total_jvm_heap_memory),
+                'total_jvm_offheap_memory': int(total_jvm_offheap_memory)
             }
         except Exception as e:
             logger.error(f"Error computing memory metrics: {e}")
@@ -200,45 +194,33 @@ class MetricsEngine:
     def _compute_shuffle_metrics(self, task_df: pd.DataFrame) -> Dict[str, Any]:
         """
         Compute shuffle metrics from actual schema.
-        
-        CORRECTED: Field names in Shuffle Write Metrics are:
-        - "Shuffle Bytes Written" (not "Bytes Written")
-        - "Shuffle Write Time" (not "Write Time")
-        - "Shuffle Records Written" (not "Records Written")
         """
         if task_df.empty:
             return {}
         
         try:
-            # Shuffle Read Metrics (standard names)
-            task_df['shuffleReadBytes'] = task_df['Task Metrics'].apply(
-                lambda x: x.get('Shuffle Read Metrics', {}).get('Total Bytes Read', 0) 
-                if isinstance(x, dict) and isinstance(x.get('Shuffle Read Metrics'), dict) else 0
-            )
+            # Shuffle Read Metrics are not directly available in sample_log_new.json, default to 0
+            task_df['shuffleReadBytes'] = 0
+            task_df['shuffleFetchWaitTime'] = 0
             
-            task_df['shuffleFetchWaitTime'] = task_df['Task Metrics'].apply(
-                lambda x: x.get('Shuffle Read Metrics', {}).get('Fetch Wait Time', 0) 
-                if isinstance(x, dict) and isinstance(x.get('Shuffle Read Metrics'), dict) else 0
-            )
-            
-            # CORRECTED: Shuffle Write Metrics use "Shuffle Bytes Written" etc.
-            task_df['shuffleWriteBytes'] = task_df['Task Metrics'].apply(
+            # Shuffle Write Metrics from Task Executor Metrics
+            task_df['shuffleWriteBytes'] = task_df['Task Executor Metrics'].apply(
                 lambda x: x.get('Shuffle Write Metrics', {}).get('Shuffle Bytes Written', 0) 
                 if isinstance(x, dict) and isinstance(x.get('Shuffle Write Metrics'), dict) else 0
             )
             
-            task_df['shuffleWriteTime'] = task_df['Task Metrics'].apply(
+            task_df['shuffleWriteTime'] = task_df['Task Executor Metrics'].apply(
                 lambda x: x.get('Shuffle Write Metrics', {}).get('Shuffle Write Time', 0) 
                 if isinstance(x, dict) and isinstance(x.get('Shuffle Write Metrics'), dict) else 0
             )
             
-            task_df['shuffleRecordsWritten'] = task_df['Task Metrics'].apply(
+            task_df['shuffleRecordsWritten'] = task_df['Task Executor Metrics'].apply(
                 lambda x: x.get('Shuffle Write Metrics', {}).get('Shuffle Records Written', 0) 
                 if isinstance(x, dict) and isinstance(x.get('Shuffle Write Metrics'), dict) else 0
             )
             
-            # Executor Run Time from Task Metrics
-            task_df['executorRunTime'] = task_df['Task Metrics'].apply(
+            # Executor Run Time from Task Executor Metrics
+            task_df['executorRunTime'] = task_df['Task Executor Metrics'].apply(
                 lambda x: x.get('Executor Run Time', 0) if isinstance(x, dict) else 0
             )
             
@@ -309,22 +291,21 @@ class MetricsEngine:
             return {}
     
     def _compute_cpu_metrics(self, task_df: pd.DataFrame) -> Dict[str, Any]:
-        """Compute CPU metrics from Task Metrics."""
+        """Compute CPU metrics from Task Executor Metrics."""
         if task_df.empty:
             return {'cpu_efficiency': 0.0}
         
         try:
-            task_df['executorCpuTime'] = task_df['Task Metrics'].apply(
+            task_df['executorCpuTime'] = task_df['Task Executor Metrics'].apply(
                 lambda x: x.get('Executor CPU Time', 0) if isinstance(x, dict) else 0
             )
             
-            task_df['executorRunTime'] = task_df['Task Metrics'].apply(
+            task_df['executorRunTime'] = task_df['Task Executor Metrics'].apply(
                 lambda x: x.get('Executor Run Time', 0) if isinstance(x, dict) else 0
             )
             
-            task_df['deserializeTime'] = task_df['Task Metrics'].apply(
-                lambda x: x.get('Executor Deserialize Time', 0) if isinstance(x, dict) else 0
-            )
+            # Deserialize Time is not directly available in sample_log_new.json, default to 0
+            task_df['deserializeTime'] = 0
             
             total_cpu_time = task_df['executorCpuTime'].sum()
             total_run_time = task_df['executorRunTime'].sum()

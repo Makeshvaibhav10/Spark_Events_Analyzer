@@ -57,10 +57,6 @@
     "Completion Time": 1730364011000,
     "Job Result": { "Result": "JobSucceeded" }
   },
-
-  // --------------------------
-  // Stage 2: heavy shuffle + data skew
-  // --------------------------
   {
     "Event": "SparkListenerJobStart",
     "Job ID": 2,
@@ -105,10 +101,6 @@
     "Completion Time": 1730364055000,
     "Job Result": { "Result": "JobFailed" }
   },
-
-  // --------------------------
-  // Stage 3: executor lost + GC issues
-  // --------------------------
   {
     "Event": "SparkListenerJobStart",
     "Job ID": 3,
@@ -156,10 +148,6 @@
     "Completion Time": 1730364101000,
     "Job Result": { "Result": "JobFailed" }
   },
-
-  // --------------------------
-  // Stage 4: healthy short stage
-  // --------------------------
   {
     "Event": "SparkListenerJobStart",
     "Job ID": 4,

@@ -1,0 +1,329 @@
+[
+  {
+    "Event": "SparkListenerApplicationStart",
+    "App Name": "SparkPi",
+    "App ID": "app-20250103-0001",
+    "Timestamp": 1704240000000,
+    "User": "spark"
+  },
+  {
+    "Event": "SparkListenerJobStart",
+    "Job ID": 0,
+    "Submission Time": 1704240001000,
+    "Stage IDs": [
+      0,
+      1
+    ]
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 0,
+      "Stage Attempt ID": 0,
+      "Stage Name": "map at SparkPi.scala:34",
+      "Number of Tasks": 10,
+      "Parent IDs": [],
+      "Submission Time": 1704240001500
+    }
+  },
+  {
+    "Event": "SparkListenerExecutorAdded",
+    "Timestamp": 1704240002000,
+    "Executor ID": "1",
+    "Executor Info": {
+      "Host": "worker-node-1",
+      "Total Cores": 4,
+      "Log Urls": {},
+      "Registration Time": 1704240002000
+    }
+  },
+  {
+    "Event": "SparkListenerExecutorAdded",
+    "Timestamp": 1704240002500,
+    "Executor ID": "2",
+    "Executor Info": {
+      "Host": "worker-node-2",
+      "Total Cores": 4,
+      "Log Urls": {},
+      "Registration Time": 1704240002500
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 0,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 0,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1704240003000,
+      "Executor ID": "1",
+      "Host": "worker-node-1",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 0,
+    "Stage Attempt ID": 0,
+    "Task Type": "ShuffleMapTask",
+    "Task End Reason": {
+      "Reason": "Success"
+    },
+    "Task Info": {
+      "Task ID": 0,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1704240003000,
+      "Finish Time": 1704240005000,
+      "Executor ID": "1",
+      "Host": "worker-node-1",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "Executor Run Time": 1800,
+      "Executor CPU Time": 1500,
+      "JVM GC Time": 100,
+      "JVMHeapMemory": 536870912,
+      "Memory Bytes Spilled": 0,
+      "Disk Bytes Spilled": 0,
+      "Peak Execution Memory": 268435456,
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 1048576,
+        "Shuffle Write Time": 50000
+      },
+      "Input Metrics": {
+        "Bytes Read": 10485760,
+        "Records Read": 1000
+      },
+      "Output Metrics": {
+        "Bytes Written": 0,
+        "Records Written": 0
+      }
+    },
+    "Task Metrics": {
+      "Executor Deserialize Time": 200,
+      "Executor Run Time": 1800,
+      "Result Size": 2048,
+      "JVM GC Time": 100,
+      "Result Serialization Time": 10,
+      "Memory Bytes Spilled": 0,
+      "Disk Bytes Spilled": 0,
+      "Shuffle Read Metrics": {
+        "Remote Blocks Fetched": 0,
+        "Local Blocks Fetched": 0,
+        "Fetch Wait Time": 0,
+        "Remote Bytes Read": 0,
+        "Total Bytes Read": 0
+      },
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 1048576,
+        "Shuffle Write Time": 50000,
+        "Shuffle Records Written": 100
+      }
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 0,
+    "Stage Attempt ID": 0,
+    "Task Type": "ShuffleMapTask",
+    "Task End Reason": {
+      "Reason": "Success"
+    },
+    "Task Info": {
+      "Task ID": 1,
+      "Index": 1,
+      "Attempt": 0,
+      "Partition ID": 1,
+      "Launch Time": 1704240003100,
+      "Finish Time": 1704240006000,
+      "Executor ID": "2",
+      "Host": "worker-node-2",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "Executor Run Time": 2700,
+      "Executor CPU Time": 2200,
+      "JVM GC Time": 400,
+      "JVMHeapMemory": 536870912,
+      "Memory Bytes Spilled": 10485760,
+      "Disk Bytes Spilled": 0,
+      "Peak Execution Memory": 402653184,
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 2097152,
+        "Shuffle Write Time": 80000
+      },
+      "Input Metrics": {
+        "Bytes Read": 20971520,
+        "Records Read": 2000
+      },
+      "Output Metrics": {
+        "Bytes Written": 0,
+        "Records Written": 0
+      }
+    },
+    "Task Metrics": {
+      "Executor Deserialize Time": 200,
+      "Executor Run Time": 2700,
+      "Result Size": 2048,
+      "JVM GC Time": 400,
+      "Result Serialization Time": 10,
+      "Memory Bytes Spilled": 10485760,
+      "Disk Bytes Spilled": 0,
+      "Shuffle Read Metrics": {
+        "Remote Blocks Fetched": 0,
+        "Local Blocks Fetched": 0,
+        "Fetch Wait Time": 0,
+        "Remote Bytes Read": 0,
+        "Total Bytes Read": 0
+      },
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 2097152,
+        "Shuffle Write Time": 80000,
+        "Shuffle Records Written": 200
+      }
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 0,
+      "Stage Attempt ID": 0,
+      "Stage Name": "map at SparkPi.scala:34",
+      "Number of Tasks": 10,
+      "Parent IDs": [],
+      "Submission Time": 1704240001500,
+      "Completion Time": 1704240010000
+    }
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 1,
+      "Stage Attempt ID": 0,
+      "Stage Name": "reduce at SparkPi.scala:38",
+      "Number of Tasks": 5,
+      "Parent IDs": [
+        0
+      ],
+      "Submission Time": 1704240010500
+    }
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 10,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1704240011000,
+      "Executor ID": "1",
+      "Host": "worker-node-1",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 1,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {
+      "Reason": "Success"
+    },
+    "Task Info": {
+      "Task ID": 10,
+      "Index": 0,
+      "Attempt": 0,
+      "Partition ID": 0,
+      "Launch Time": 1704240011000,
+      "Finish Time": 1704240013000,
+      "Executor ID": "1",
+      "Host": "worker-node-1",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "Executor Run Time": 1900,
+      "Executor CPU Time": 1700,
+      "JVM GC Time": 50,
+      "JVMHeapMemory": 536870912,
+      "Memory Bytes Spilled": 0,
+      "Disk Bytes Spilled": 0,
+      "Peak Execution Memory": 134217728,
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 0,
+        "Shuffle Write Time": 0
+      },
+      "Input Metrics": {
+        "Bytes Read": 0,
+        "Records Read": 0
+      },
+      "Output Metrics": {
+        "Bytes Written": 1024,
+        "Records Written": 1
+      }
+    },
+    "Task Metrics": {
+      "Executor Deserialize Time": 100,
+      "Executor Run Time": 1900,
+      "Result Size": 1024,
+      "JVM GC Time": 50,
+      "Result Serialization Time": 5,
+      "Memory Bytes Spilled": 0,
+      "Disk Bytes Spilled": 0,
+      "Shuffle Read Metrics": {
+        "Remote Blocks Fetched": 2,
+        "Local Blocks Fetched": 0,
+        "Fetch Wait Time": 100,
+        "Remote Bytes Read": 3145728,
+        "Total Bytes Read": 3145728
+      },
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 0,
+        "Shuffle Write Time": 0,
+        "Shuffle Records Written": 0
+      }
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 1,
+      "Stage Attempt ID": 0,
+      "Stage Name": "reduce at SparkPi.scala:38",
+      "Number of Tasks": 5,
+      "Parent IDs": [
+        0
+      ],
+      "Submission Time": 1704240010500,
+      "Completion Time": 1704240015000
+    }
+  },
+  {
+    "Event": "SparkListenerJobEnd",
+    "Job ID": 0,
+    "Completion Time": 1704240015500,
+    "Job Result": {
+      "Result": "JobSucceeded"
+    }
+  },
+  {
+    "Event": "SparkListenerApplicationEnd",
+    "Timestamp": 1704240016000
+  }
+]

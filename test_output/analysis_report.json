@@ -1,0 +1,153 @@
+{
+  "report_metadata": {
+    "generated_at": "2025-11-03T17:49:36.820095",
+    "report_version": "2.0",
+    "analysis_engine": "Spark Event Analyzer - Phase 2",
+    "analyzer_capabilities": [
+      "Bottleneck Detection",
+      "Root Cause Analysis",
+      "Failure Detection",
+      "Correlation Analysis",
+      "Dynamic Thresholding"
+    ]
+  },
+  "executive_summary": {
+    "health_score": 50,
+    "health_status": "POOR",
+    "total_bottlenecks": 2,
+    "critical_bottlenecks": 2,
+    "high_priority_bottlenecks": 0,
+    "total_anomalies": 2,
+    "requires_immediate_action": true,
+    "primary_concerns": [
+      "DATA_SKEW [CRITICAL]",
+      "EXECUTOR_LOSS [CRITICAL]"
+    ]
+  },
+  "performance_metrics": {
+    "global": {
+      "total_jobs": 0,
+      "total_stages": 3,
+      "total_tasks": 10,
+      "application_duration": "0ms",
+      "application_duration_ms": 0
+    },
+    "task_metrics": {
+      "total_tasks": 10,
+      "mean_duration_ms": 995.0,
+      "median_duration_ms": 550.0,
+      "std_duration_ms": 1164.39,
+      "skew_ratio": 1.17,
+      "coefficient_of_variation": 0,
+      "percentiles": {
+        "p50": 550.0,
+        "p75": 1325.0,
+        "p90": 1749.999999999999,
+        "p95": 2874.9999999999973,
+        "p99": 3775.0000000000005
+      },
+      "stragglers": {
+        "count": 0,
+        "percentage": 0
+      }
+    },
+    "cpu_metrics": {
+      "efficiency": 111616161.616,
+      "efficiency_percentage": "11161616161.62%",
+      "wait_percentage": "-11161616061.62%",
+      "deserialize_overhead_percentage": "0.00%"
+    },
+    "memory_metrics": {
+      "gc_overhead_ratio": 0.04,
+      "gc_overhead_percentage": "4.04%",
+      "gc_pressure_level": "LOW",
+      "memory_bytes_spilled": 0,
+      "memory_spilled_formatted": "0.00 B",
+      "disk_bytes_spilled": 0,
+      "total_spilled_formatted": "0.00 B",
+      "tasks_with_spill": 0
+    },
+    "io_metrics": {
+      "input_bytes": 0,
+      "input_formatted": "0.00 B",
+      "output_bytes": 0,
+      "output_formatted": "0.00 B",
+      "input_records": 0
+    },
+    "shuffle_metrics": {
+      "shuffle_read_bytes": 0,
+      "shuffle_read_formatted": "0.00 B",
+      "shuffle_write_bytes": 0,
+      "shuffle_write_formatted": "0.00 B",
+      "total_shuffle_formatted": "0.00 B",
+      "shuffle_time_ms": 0,
+      "shuffle_ratio": 0,
+      "shuffle_ratio_percentage": "0.00%",
+      "shuffle_efficiency": 0
+    },
+    "executor_metrics": {
+      "total_executors": 3,
+      "imbalance_ratio": 0,
+      "load_imbalance_percentage": 0,
+      "min_tasks_per_executor": 0,
+      "max_tasks_per_executor": 0,
+      "mean_tasks_per_executor": 0
+    },
+    "correlations": {}
+  },
+  "bottlenecks": [
+    {
+      "type": "DATA_SKEW",
+      "severity": "CRITICAL",
+      "description": "High task duration variance: 1.17",
+      "metric_value": 1.1702418462407753,
+      "recommendation": "Repartition data or use salting for skewed keys"
+    },
+    {
+      "type": "EXECUTOR_LOSS",
+      "severity": "CRITICAL",
+      "description": "Executor(s) lost: 1 removal(s)",
+      "metric_value": 1,
+      "removal_reasons": [
+        "Executor lost due to heartbeat timeout"
+      ],
+      "recommendation": "Check executor logs, increase memory, or adjust timeout settings"
+    }
+  ],
+  "anomalies": [
+    {
+      "type": "FREQUENT_HEARTBEAT_TIMEOUTS",
+      "severity": "HIGH",
+      "count": 1,
+      "description": "1 executor(s) lost due to heartbeat timeout",
+      "probable_cause": "Network issues, long GC pauses, or overloaded executors",
+      "recommendation": "Increase spark.executor.heartbeatInterval and spark.network.timeout"
+    },
+    {
+      "type": "SHORT_LIVED_EXECUTORS",
+      "severity": "HIGH",
+      "count": 1,
+      "description": "1 executor(s) lived less than 1 minute",
+      "executors": [
+        {
+          "executor_id": "exec-3",
+          "lifetime_ms": 8400,
+          "reason": "Executor lost due to heartbeat timeout"
+        }
+      ],
+      "probable_cause": "Executor crashes, OOM, or configuration issues",
+      "recommendation": "Check executor logs for crashes and increase memory if needed"
+    }
+  ],
+  "warnings": [],
+  "failures": {},
+  "root_cause_analysis": [],
+  "recommendations": [],
+  "action_items": {
+    "CRITICAL": [],
+    "HIGH": [],
+    "MEDIUM": [],
+    "LOW": []
+  },
+  "analysis_metadata": {}
+}

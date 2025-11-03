@@ -4,31 +4,35 @@ SPARK EVENT ANALYZER - COMPREHENSIVE PERFORMANCE REPORT
 
 EXECUTIVE SUMMARY
 --------------------------------------------------------------------------------
-Health Status: GOOD (88/100)
-Total Bottlenecks: 1
-Critical Issues: 0
-High Priority Issues: 1
+Health Status: POOR (50/100)
+Total Bottlenecks: 2
+Critical Issues: 2
+High Priority Issues: 0
+
+*** IMMEDIATE ACTION REQUIRED ***
 
 APPLICATION OVERVIEW
 --------------------------------------------------------------------------------
-Total Jobs: 1
-Total Stages: 2
-Total Tasks: 2
+Total Jobs: 0
+Total Stages: 3
+Total Tasks: 10
 Total Duration: 0ms
 
 KEY PERFORMANCE INDICATORS
 --------------------------------------------------------------------------------
-CPU Efficiency: 35.83%
-GC Overhead: 0.00% (LOW)
-Shuffle Efficiency: 0.0
-Memory Spilled: 1.49 GB
+CPU Efficiency: 11161616161.62%
+GC Overhead: 4.04% (LOW)
+Shuffle Efficiency: 0
+Memory Spilled: 0.00 B
 
-IDENTIFIED BOTTLENECKS (1)
+IDENTIFIED BOTTLENECKS (2)
 --------------------------------------------------------------------------------
-1. CPU Underutilization / CPU Underutilization [HIGH] - Confidence: 80%
-   Impact: CPUs are 64.2% idle, indicating inefficient resource utilization
-   Probable Cause: CPU underutilization with 64.2% CPU idle time. Supporting Evidence: CPU efficiency is 35.8%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient pa...
+1. DATA_SKEW [CRITICAL] - Confidence: 100%
+   Impact: N/A
+
+2. EXECUTOR_LOSS [CRITICAL] - Confidence: 100%
+   Impact: N/A
 
 ================================================================================
-Report generated: 2025-11-03T12:30:59.460175
+Report generated: 2025-11-03T17:49:36.820095
 ================================================================================

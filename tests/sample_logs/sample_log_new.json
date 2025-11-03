@@ -1,0 +1,129 @@
+[
+  {
+    "Event": "SparkListenerApplicationStart",
+    "App Name": "ExampleSparkApp",
+    "App ID": "application_1730619000000_0001",
+    "Timestamp": 1730619000123,
+    "User": "makeshvaibhav",
+    "App Attempt ID": null,
+    "Spark Version": "3.5.1"
+  },
+  {
+    "Event": "SparkListenerExecutorAdded",
+    "Timestamp": 1730619001200,
+    "Executor ID": "1",
+    "Executor Info": {
+      "Host": "ip-10-0-0-1.ec2.internal",
+      "Total Cores": 4,
+      "Log Urls": {
+        "stdout": "http://ip-10-0-0-1:4040/logPage?appId=1&executorId=1&logType=stdout",
+        "stderr": "http://ip-10-0-0-1:4040/logPage?appId=1&executorId=1&logType=stderr"
+      },
+      "Attributes": {},
+      "Resource Profile Id": 0
+    }
+  },
+  {
+    "Event": "SparkListenerBlockManagerAdded",
+    "Timestamp": 1730619001300,
+    "Block Manager ID": {
+      "Executor ID": "1",
+      "Host": "ip-10-0-0-1.ec2.internal",
+      "Port": 35010
+    },
+    "Maximum OnHeap Memory": 2147483648,
+    "Maximum OffHeap Memory": 0
+  },
+  {
+    "Event": "SparkListenerStageSubmitted",
+    "Stage Info": {
+      "Stage ID": 0,
+      "Stage Attempt ID": 0,
+      "Name": "map at ExampleJob.scala:42",
+      "Number of Tasks": 2,
+      "RDD Info": [],
+      "Parent IDs": [],
+      "Details": "Example Spark job stage for map tasks"
+    },
+    "Timestamp": 1730619002000
+  },
+  {
+    "Event": "SparkListenerTaskStart",
+    "Stage ID": 0,
+    "Stage Attempt ID": 0,
+    "Task Info": {
+      "Task ID": 1,
+      "Index": 0,
+      "Attempt": 1,
+      "Partition ID": 0,
+      "Launch Time": 1730619002200,
+      "Executor ID": "1",
+      "Host": "ip-10-0-0-1.ec2.internal",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false
+    }
+  },
+  {
+    "Event": "SparkListenerTaskEnd",
+    "Stage ID": 0,
+    "Stage Attempt ID": 0,
+    "Task Type": "ResultTask",
+    "Task End Reason": {
+      "Reason": "Success"
+    },
+    "Task Info": {
+      "Task ID": 1,
+      "Index": 0,
+      "Attempt": 1,
+      "Partition ID": 0,
+      "Launch Time": 1730619002200,
+      "Finish Time": 1730619003100,
+      "Executor ID": "1",
+      "Host": "ip-10-0-0-1.ec2.internal",
+      "Locality": "PROCESS_LOCAL",
+      "Speculative": false,
+      "Failed": false,
+      "Killed": false
+    },
+    "Task Executor Metrics": {
+      "JVMHeapMemory": 134217728,
+      "JVMOffHeapMemory": 0,
+      "Executor CPU Time": 85000000,
+      "Executor Run Time": 900,
+      "Result Size": 512,
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 2048,
+        "Shuffle Write Time": 3000,
+        "Shuffle Records Written": 20
+      },
+      "Input Metrics": {
+        "Bytes Read": 4096,
+        "Records Read": 40
+      },
+      "Output Metrics": {
+        "Bytes Written": 1024,
+        "Records Written": 10
+      }
+    }
+  },
+  {
+    "Event": "SparkListenerStageCompleted",
+    "Stage Info": {
+      "Stage ID": 0,
+      "Stage Attempt ID": 0,
+      "Name": "map at ExampleJob.scala:42",
+      "Number of Tasks": 2,
+      "Completion Time": 1730619003200
+    }
+  },
+  {
+    "Event": "SparkListenerExecutorRemoved",
+    "Timestamp": 1730619004000,
+    "Executor ID": "1",
+    "Removed Reason": "Executor lost due to heartbeat timeout"
+  },
+  {
+    "Event": "SparkListenerApplicationEnd",
+    "Timestamp": 1730619005000
+  }
+]

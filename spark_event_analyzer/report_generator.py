@@ -191,7 +191,7 @@ def _compute_health_score(analysis: Dict[str, Any]) -> int:
     
     for bottleneck in bottlenecks:
         severity = bottleneck.get('severity', 'LOW')
-        confidence = bottleneck.get('confidence', 0.5)
+        confidence = bottleneck.get('confidence', 1.0)
         
         # Deduct points based on severity and confidence
         deduction = 0
@@ -223,8 +223,7 @@ def _identify_primary_concerns(bottlenecks: List[Dict[str, Any]]) -> List[str]:
     )[:3]
     
     for b in sorted_bottlenecks:
-        concerns.append(f"{b.get('bottleneck', 'Unknown')} [{b.get('severity', 'UNKNOWN')}]")
-    
+                    concerns.append(f"{b.get('type', 'Unknown')} [{b.get('severity', 'UNKNOWN')}]")    
     return concerns
 
 def _generate_markdown_report(report: Dict[str, Any], output_path: str):
@@ -303,9 +302,9 @@ def _generate_markdown_report(report: Dict[str, Any], output_path: str):
             
             for i, b in enumerate(bottlenecks, 1):
                 severity_emoji = "🔴" if b['severity'] == "CRITICAL" else "🟠" if b['severity'] == "HIGH" else "🟡"
-                f.write(f"### {i}. {severity_emoji} {b['bottleneck']}\n\n")
+                f.write(f"### {i}. {severity_emoji} {b['type']}\n\n")
                 f.write(f"**Severity:** {b['severity']}  \n")
-                f.write(f"**Confidence:** {b['confidence']*100:.0f}%  \n")
+                f.write(f"**Confidence:** {b.get('confidence', 1.0)*100:.0f}%  \n")
                 f.write(f"**Type:** {b.get('type', 'UNKNOWN')}  \n")
                 f.write(f"**Impact:** {b.get('impact', 'N/A')}  \n\n")
                 
@@ -410,7 +409,7 @@ def _generate_text_summary(report: Dict[str, Any], output_path: str):
             f.write(f"IDENTIFIED BOTTLENECKS ({len(bottlenecks)})\n")
             f.write("-" * 80 + "\n")
             for i, b in enumerate(bottlenecks, 1):
-                f.write(f"{i}. {b['bottleneck']} [{b['severity']}] - Confidence: {b['confidence']*100:.0f}%\n")
+                f.write(f"{i}. {b['type']} [{b['severity']}] - Confidence: {b.get('confidence', 1.0)*100:.0f}%\n")
                 f.write(f"   Impact: {b.get('impact', 'N/A')}\n")
                 if 'reasoning' in b:
                     reasoning_short = b['reasoning'][:200] if len(b['reasoning']) > 200 else b['reasoning']
