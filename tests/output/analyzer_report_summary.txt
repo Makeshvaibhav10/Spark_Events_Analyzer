@@ -11,24 +11,24 @@ High Priority Issues: 1
 
 APPLICATION OVERVIEW
 --------------------------------------------------------------------------------
-Total Jobs: 1
-Total Stages: 2
-Total Tasks: 2
+Total Jobs: 0
+Total Stages: 1
+Total Tasks: 1
 Total Duration: 0ms
 
 KEY PERFORMANCE INDICATORS
 --------------------------------------------------------------------------------
-CPU Efficiency: 35.83%
+CPU Efficiency: 0.00%
 GC Overhead: 0.00% (LOW)
 Shuffle Efficiency: 0.0
-Memory Spilled: 1.49 GB
+Memory Spilled: 0.00 B
 
 IDENTIFIED BOTTLENECKS (1)
 --------------------------------------------------------------------------------
-1. CPU Underutilization / CPU Underutilization [HIGH] - Confidence: 80%
-   Impact: CPUs are 64.2% idle, indicating inefficient resource utilization
-   Probable Cause: CPU underutilization with 64.2% CPU idle time. Supporting Evidence: CPU efficiency is 35.8%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient pa...
+1. CPU Underutilization / CPU Underutilization [HIGH] - Confidence: 78%
+   Impact: CPUs are 100.0% idle, indicating inefficient resource utilization
+   Probable Cause: CPU underutilization with 100.0% CPU idle time. Supporting Evidence: CPU efficiency is 0.0%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient pa...
 
 ================================================================================
-Report generated: 2025-11-03T12:30:59.460175
+Report generated: 2025-11-03T12:30:59.475019
 ================================================================================

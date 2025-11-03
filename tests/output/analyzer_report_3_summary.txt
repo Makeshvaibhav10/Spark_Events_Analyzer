@@ -1,59 +1,38 @@
 ================================================================================
-SPARK EVENT ANALYZER - PERFORMANCE REPORT
+SPARK EVENT ANALYZER - COMPREHENSIVE PERFORMANCE REPORT
 ================================================================================
 
-SUMMARY
+EXECUTIVE SUMMARY
 --------------------------------------------------------------------------------
+Health Status: FAIR (79/100)
+Total Bottlenecks: 2
+Critical Issues: 0
+High Priority Issues: 1
+
+APPLICATION OVERVIEW
+--------------------------------------------------------------------------------
+Total Jobs: 0
+Total Stages: 0
 Total Tasks: 380
-Total Runtime: 47m 18s
-Total Executors: 1
+Total Duration: 0ms
 
 KEY PERFORMANCE INDICATORS
 --------------------------------------------------------------------------------
 CPU Efficiency: 40.29%
-GC Overhead: 22.53%
-Shuffle Overhead: 0.00%
-Task Skew Ratio: 0.286
-Executor Imbalance: 0.0
+GC Overhead: 22.53% (HIGH)
+Shuffle Efficiency: 0.0
+Memory Spilled: 1.96 GB
 
 IDENTIFIED BOTTLENECKS (2)
 --------------------------------------------------------------------------------
-1. GC Overhead [HIGH]
-   Impact: GC consumes 22.5% of executor runtime
-   Confidence: 80%
+1. GC Overhead / Memory Pressure [HIGH] - Confidence: 92%
+   Impact: GC consumes 22.5% of executor runtime, causing performance degradation
+   Probable Cause: Memory pressure due to high garbage collection overhead. Supporting Evidence: GC consumes 22.5% of executor runtime, 1.96 GB spilled to disk (strong correlation: 0.93). Confidence base...
 
-2. Underutilized CPU [MEDIUM]
-   Impact: CPUs are only 40.3% utilized
-   Confidence: 75%
-
-ROOT CAUSE ANALYSIS (2)
---------------------------------------------------------------------------------
-1. Memory Pressure / Excessive GC Overhead [HIGH]
-   Confidence: 80%
-   Recommendation: HIGH: GC overhead is 22.5%. Increase executor memory by 20-30% and tune GC settings. Consider reviewing caching strategy.
-
-2. CPU Underutilization [MEDIUM]
-   Confidence: 75%
-   Recommendation: HIGH: CPU utilization is only 40.3%. Increase parallelism and check for I/O bottlenecks.
-
-PRIORITIZED ACTION ITEMS
---------------------------------------------------------------------------------
-
-HIGH Priority:
-  • Increase executor memory: spark.executor.memory (current impact: 22.5% GC time)
-  • Tune GC settings: Consider G1GC with -XX:+UseG1GC
-  • Review spark.memory.fraction (default: 0.6)
-  • Check for memory leaks in UDFs or transformations
-  • Consider increasing spark.memory.storageFraction if caching is heavy
-
-MEDIUM Priority:
-  • Increase cores per executor: spark.executor.cores (current utilization: 40.3%)
-  • Check for I/O bottlenecks causing CPU idle time
-  • Verify data locality: review spark.locality.wait
-  • Increase parallelism: spark.default.parallelism
-  • Review serialization overhead: use Kryo serializer
-  • Check network bandwidth if shuffle-heavy
+2. CPU Underutilization / CPU Underutilization [MEDIUM] - Confidence: 78%
+   Impact: CPUs are 59.7% idle, indicating inefficient resource utilization
+   Probable Cause: CPU underutilization with 59.7% CPU idle time. Supporting Evidence: CPU efficiency is 40.3%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient pa...
 
 ================================================================================
-Report generated: 2025-11-01T18:46:24.966975
+Report generated: 2025-11-03T12:30:59.488000
 ================================================================================

@@ -1,61 +1,137 @@
 {
-    "summary": {
-        "total_jobs": 0,
-        "total_stages": 0,
-        "total_tasks": 0,
-        "total_runtime": "0h 0m 0s"
-    },
-    "performance_summary": {
-        "task_metrics": {
-            "mean_task_duration": 500.0,
-            "std_task_duration": NaN,
-            "task_skew_ratio": NaN
-        },
-        "executor_metrics": {
-            "executor_task_counts": {
-                "1": 1
-            },
-            "executor_imbalance_ratio": NaN
-        },
-        "cpu_metrics": {
-            "cpu_efficiency": 0
-        },
-        "memory_metrics": {
-            "gc_overhead_ratio": 0,
-            "memoryBytesSpilled": 0
-        },
-        "io_metrics": {
-            "inputBytes": 0,
-            "outputBytes": 0
-        },
-        "shuffle_metrics": {
-            "shuffleReadBytes": 0,
-            "shuffleWriteBytes": 0,
-            "shuffleTime": 0,
-            "shuffle_ratio": 0
-        }
-    },
-    "bottlenecks": [
-        {
-            "bottleneck": "Underutilized CPU",
-            "metric_evidence": {
-                "cpu_efficiency": 0
-            },
-            "confidence": 0.8
-        }
-    ],
-    "failures": [],
-    "root_cause_analysis": [
-        {
-            "root_cause": "Underutilized CPU",
-            "confidence": 0.8,
-            "evidence": {
-                "cpu_efficiency": 0
-            },
-            "recommendation": "Increase the number of cores per executor or check for I/O bottlenecks."
-        }
-    ],
-    "recommendations": [
-        "Increase the number of cores per executor or check for I/O bottlenecks."
+  "report_metadata": {
+    "generated_at": "2025-11-03T12:30:59.475019",
+    "report_version": "2.0",
+    "analysis_engine": "Spark Event Analyzer - Phase 2",
+    "analyzer_capabilities": [
+      "Bottleneck Detection",
+      "Root Cause Analysis",
+      "Failure Detection",
+      "Correlation Analysis",
+      "Dynamic Thresholding"
     ]
+  },
+  "executive_summary": {
+    "health_score": 88,
+    "health_status": "GOOD",
+    "total_bottlenecks": 1,
+    "critical_bottlenecks": 0,
+    "high_priority_bottlenecks": 1,
+    "total_anomalies": 0,
+    "requires_immediate_action": false,
+    "primary_concerns": [
+      "CPU Underutilization / CPU Underutilization [HIGH]"
+    ]
+  },
+  "performance_metrics": {
+    "global": {
+      "total_jobs": 0,
+      "total_stages": 1,
+      "total_tasks": 1,
+      "application_duration": "0ms",
+      "application_duration_ms": 0
+    },
+    "task_metrics": {
+      "total_tasks": 1,
+      "mean_duration_ms": 500.0,
+      "median_duration_ms": 500.0,
+      "std_duration_ms": 0.0,
+      "skew_ratio": 0.0,
+      "coefficient_of_variation": 0.0,
+      "percentiles": {
+        "p25": 500.0,
+        "p50": 500.0,
+        "p75": 500.0,
+        "p90": 500.0,
+        "p95": 500.0,
+        "p99": 500.0
+      },
+      "stragglers": {
+        "count": 0,
+        "percentage": 0.0
+      }
+    },
+    "cpu_metrics": {
+      "efficiency": 0.0,
+      "efficiency_percentage": "0.00%",
+      "wait_percentage": "0.00%",
+      "deserialize_overhead_percentage": "0.00%"
+    },
+    "memory_metrics": {
+      "gc_overhead_ratio": 0.0,
+      "gc_overhead_percentage": "0.00%",
+      "gc_pressure_level": "LOW",
+      "memory_bytes_spilled": 0,
+      "memory_spilled_formatted": "0.00 B",
+      "disk_bytes_spilled": 0,
+      "total_spilled_formatted": "0.00 B",
+      "tasks_with_spill": 0
+    },
+    "io_metrics": {
+      "input_bytes": 0,
+      "input_formatted": "0.00 B",
+      "output_bytes": 0,
+      "output_formatted": "0.00 B",
+      "input_records": 0
+    },
+    "shuffle_metrics": {
+      "shuffle_read_bytes": 0,
+      "shuffle_read_formatted": "0.00 B",
+      "shuffle_write_bytes": 0,
+      "shuffle_write_formatted": "0.00 B",
+      "total_shuffle_formatted": "0.00 B",
+      "shuffle_time_ms": 0,
+      "shuffle_ratio": 0.0,
+      "shuffle_ratio_percentage": "0.00%",
+      "shuffle_efficiency": 0.0
+    },
+    "executor_metrics": {
+      "total_executors": 1,
+      "imbalance_ratio": 0.0,
+      "load_imbalance_percentage": 0.0,
+      "min_tasks_per_executor": 1,
+      "max_tasks_per_executor": 1,
+      "mean_tasks_per_executor": 1.0
+    },
+    "correlations": {}
+  },
+  "bottlenecks": [
+    {
+      "bottleneck": "CPU Underutilization / CPU Underutilization",
+      "type": "CPU",
+      "severity": "HIGH",
+      "confidence": 0.777242545993627,
+      "impact_score": 1.0,
+      "metric_evidence": {
+        "cpu_efficiency": 0.0,
+        "cpu_utilization_percentage": "0.00%",
+        "cpu_wait_percentage": "0.00%",
+        "shuffle_ratio": 0.0,
+        "deserialize_overhead_percentage": 0.0
+      },
+      "correlation_evidence": {
+        "is_io_bottleneck": false,
+        "shuffle_correlation": "LOW"
+      },
+      "reasoning": "Probable Cause: CPU underutilization with 100.0% CPU idle time. Supporting Evidence: CPU efficiency is 0.0%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient parallelism.",
+      "impact": "CPUs are 100.0% idle, indicating inefficient resource utilization"
+    }
+  ],
+  "anomalies": [],
+  "warnings": [],
+  "failures": {},
+  "root_cause_analysis": [],
+  "recommendations": [],
+  "action_items": {
+    "CRITICAL": [],
+    "HIGH": [],
+    "MEDIUM": [],
+    "LOW": []
+  },
+  "analysis_metadata": {
+    "total_bottlenecks": 1,
+    "critical_bottlenecks": 0,
+    "high_bottlenecks": 1,
+    "total_anomalies": 0
+  }
 }

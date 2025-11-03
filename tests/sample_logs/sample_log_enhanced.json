@@ -1,3 +1,4 @@
+
 [
   {
     "Event": "SparkListenerJobStart",
@@ -21,15 +22,24 @@
   {
     "Event": "SparkListenerTaskEnd",
     "Stage ID": 34,
-    "Task Info": {"Task ID": 1, "Launch Time": 1730350915000, "Finish Time": 1730350922000, "Successful": true},
+    "Stage Attempt ID": 0,
+    "Task Info": {"Task ID": 1, "Executor ID": "1", "Launch Time": 1730350915000, "Finish Time": 1730350922000, "Successful": true},
+    "Task Executor Metrics": {
+        "TotalGCTime": 150,
+        "MinorGCTime": 100,
+        "MajorGCTime": 50
+    },
     "Task Metrics": {
       "Executor Run Time": 700,
       "Executor CPU Time": 280,
       "Memory Bytes Spilled": 524288000,
       "Disk Bytes Spilled": 1073741824,
-      "Shuffle Read Bytes": 52428800,
-      "Shuffle Write Bytes": 0,
-      "JVM GC Time": 150,
+      "Shuffle Read Metrics": {
+        "Total Bytes Read": 52428800
+      },
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 0
+      },
       "Executor Deserialize Time": 50
     }
   },
@@ -54,22 +64,32 @@
   {
     "Event": "SparkListenerTaskEnd",
     "Stage ID": 35,
+    "Stage Attempt ID": 0,
     "Task Info": {
       "Task ID": 90,
+      "Executor ID": "2",
       "Launch Time": 1730350940000,
       "Finish Time": 1730350950000,
       "Successful": false,
       "Failed": true,
       "Error Message": "FetchFailedException: Shuffle block fetch failed due to executor lost (OOM)"
     },
+    "Task Executor Metrics": {
+        "TotalGCTime": 400,
+        "MinorGCTime": 200,
+        "MajorGCTime": 200
+    },
     "Task Metrics": {
       "Executor Run Time": 500,
       "Executor CPU Time": 150,
       "Memory Bytes Spilled": 1073741824,
       "Disk Bytes Spilled": 2147483648,
-      "Shuffle Read Bytes": 104857600,
-      "Shuffle Write Bytes": 0,
-      "JVM GC Time": 400,
+      "Shuffle Read Metrics": {
+        "Total Bytes Read": 104857600
+      },
+      "Shuffle Write Metrics": {
+        "Shuffle Bytes Written": 0
+      },
       "Executor Deserialize Time": 60
     }
   },

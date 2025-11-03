@@ -1,6 +1,6 @@
 {
   "report_metadata": {
-    "generated_at": "2025-11-01T22:59:05.238582",
+    "generated_at": "2025-11-03T12:30:59.460175",
     "report_version": "2.0",
     "analysis_engine": "Spark Event Analyzer - Phase 2",
     "analyzer_capabilities": [
@@ -12,15 +12,14 @@
     ]
   },
   "executive_summary": {
-    "health_score": 63,
-    "health_status": "FAIR",
-    "total_bottlenecks": 2,
-    "critical_bottlenecks": 1,
+    "health_score": 88,
+    "health_status": "GOOD",
+    "total_bottlenecks": 1,
+    "critical_bottlenecks": 0,
     "high_priority_bottlenecks": 1,
     "total_anomalies": 1,
-    "requires_immediate_action": true,
+    "requires_immediate_action": false,
     "primary_concerns": [
-      "GC Overhead / Memory Pressure [CRITICAL]",
       "CPU Underutilization / CPU Underutilization [HIGH]"
     ],
     "total_failures": 1,
@@ -61,9 +60,9 @@
       "deserialize_overhead_percentage": "9.17%"
     },
     "memory_metrics": {
-      "gc_overhead_ratio": 0.458,
-      "gc_overhead_percentage": "45.83%",
-      "gc_pressure_level": "CRITICAL",
+      "gc_overhead_ratio": 0.0,
+      "gc_overhead_percentage": "0.00%",
+      "gc_pressure_level": "LOW",
       "memory_bytes_spilled": 1598029824,
       "memory_spilled_formatted": "1.49 GB",
       "disk_bytes_spilled": 3221225472,
@@ -78,53 +77,32 @@
       "input_records": 0
     },
     "shuffle_metrics": {
-      "shuffle_read_bytes": 0,
-      "shuffle_read_formatted": "0.00 B",
+      "shuffle_read_bytes": 157286400,
+      "shuffle_read_formatted": "150.00 MB",
       "shuffle_write_bytes": 0,
       "shuffle_write_formatted": "0.00 B",
-      "total_shuffle_formatted": "0.00 B",
+      "total_shuffle_formatted": "150.00 MB",
       "shuffle_time_ms": 0,
       "shuffle_ratio": 0.0,
       "shuffle_ratio_percentage": "0.00%",
       "shuffle_efficiency": 0.0
     },
     "executor_metrics": {
-      "total_executors": 0,
-      "imbalance_ratio": 0,
-      "load_imbalance_percentage": 0,
-      "min_tasks_per_executor": 0,
-      "max_tasks_per_executor": 0,
-      "mean_tasks_per_executor": 0
+      "total_executors": 2,
+      "imbalance_ratio": 0.0,
+      "load_imbalance_percentage": 0.0,
+      "min_tasks_per_executor": 1,
+      "max_tasks_per_executor": 1,
+      "mean_tasks_per_executor": 1.0
     },
     "correlations": {
-      "gc_vs_duration": 1.0,
-      "spill_vs_gc": 1.0,
-      "shuffle_vs_duration": 0.0,
+      "gc_vs_duration": 0.0,
+      "spill_vs_gc": 0.0,
+      "shuffle_vs_duration": 1.0,
       "cpu_vs_duration": -1.0
     }
   },
   "bottlenecks": [
-    {
-      "bottleneck": "GC Overhead / Memory Pressure",
-      "type": "MEMORY",
-      "severity": "CRITICAL",
-      "confidence": 1.0,
-      "impact_score": 0.9166666666666666,
-      "metric_evidence": {
-        "gc_overhead_ratio": 0.4583333333333333,
-        "gc_overhead_percentage": "45.83%",
-        "memoryBytesSpilled": 1598029824,
-        "memory_spilled_formatted": "1.49 GB",
-        "gc_pressure_level": "CRITICAL",
-        "total_gc_time_ms": 550
-      },
-      "correlation_evidence": {
-        "spill_vs_gc_correlation": 1.0,
-        "correlation_strength": "STRONG"
-      },
-      "reasoning": "Probable Cause: Memory pressure due to critical garbage collection overhead. Supporting Evidence: GC consumes 45.8% of executor runtime, 1.49 GB spilled to disk (strong correlation: 1.00). Confidence based on GC impact severity and correlation with memory metrics.",
-      "impact": "GC consumes 45.8% of executor runtime, causing performance degradation"
-    },
     {
       "bottleneck": "CPU Underutilization / CPU Underutilization",
       "type": "CPU",
@@ -200,8 +178,8 @@
     "LOW": []
   },
   "analysis_metadata": {
-    "total_bottlenecks": 2,
-    "critical_bottlenecks": 1,
+    "total_bottlenecks": 1,
+    "critical_bottlenecks": 0,
     "high_bottlenecks": 1,
     "total_anomalies": 1
   }

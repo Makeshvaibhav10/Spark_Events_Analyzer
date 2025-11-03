@@ -26,6 +26,7 @@
   {
     "Event": "SparkListenerTaskEnd",
     "Stage ID": 1,
+    "Stage Attempt ID": 0,
     "Task Info": {
       "Task ID": 101,
       "Launch Time": 1730364002000,
@@ -71,6 +72,7 @@
   {
     "Event": "SparkListenerTaskEnd",
     "Stage ID": 2,
+    "Stage Attempt ID": 0,
     "Task Info": {
       "Task ID": 501,
       "Launch Time": 1730364021000,
@@ -123,6 +125,7 @@
   {
     "Event": "SparkListenerTaskEnd",
     "Stage ID": 3,
+    "Stage Attempt ID": 0,
     "Task Info": {
       "Task ID": 801,
       "Executor ID": "5",
@@ -168,6 +171,7 @@
   {
     "Event": "SparkListenerTaskEnd",
     "Stage ID": 4,
+    "Stage Attempt ID": 0,
     "Task Info": {
       "Task ID": 901,
       "Executor ID": "6",

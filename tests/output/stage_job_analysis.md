@@ -18,9 +18,10 @@
 ### Stage 34: aggregateByKey
 
 - **Transformation:** unknown (unknown)
-- **Severity:** MEDIUM
+- **Severity:** HIGH
 - **Issues:**
   - Memory spill: 500.00 MB
+  - Excessive shuffle: 100.0% of data
 
 ### Stage 35: join
 
@@ -28,12 +29,13 @@
 - **Severity:** CRITICAL
 - **Issues:**
   - Memory spill: 1.00 GB
+  - Excessive shuffle: 100.0% of data
   - Stage failed: FetchFailedException (executor lost due to OOM)
 
 ## Performance Hotspots
 
 | Rank | Stage ID | Duration | Tasks | Transformation | Issues |
 |------|----------|----------|-------|----------------|--------|
-| 1 | 35 | 10.0s | 1 | join | 2 |
-| 2 | 34 | 7.0s | 1 | unknown | 1 |
+| 1 | 35 | 10.0s | 1 | join | 3 |
+| 2 | 34 | 7.0s | 1 | unknown | 2 |
 

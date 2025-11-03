@@ -1,6 +1,6 @@
 # Spark Event Log Analysis Report
 
-**Generated:** 2025-11-03T12:30:59.460175  
+**Generated:** 2025-11-03T12:30:59.475019  
 **Analyzer Version:** 2.0  
 
 ## 📊 Executive Summary
@@ -10,7 +10,7 @@
 - **Total Bottlenecks:** 1
 - **Critical Issues:** 0
 - **High Priority Issues:** 1
-- **Anomalies Detected:** 1
+- **Anomalies Detected:** 0
 
 **Primary Concerns:**
 - CPU Underutilization / CPU Underutilization [HIGH]
@@ -21,48 +21,40 @@
 
 | Metric | Value |
 |--------|-------|
-| Total Jobs | 1 |
-| Total Stages | 2 |
-| Total Tasks | 2 |
+| Total Jobs | 0 |
+| Total Stages | 1 |
+| Total Tasks | 1 |
 | Total Duration | 0ms |
 
 ### Key Performance Indicators
 
 | KPI | Value | Status |
 |-----|-------|--------|
-| CPU Efficiency | 35.83% | 🔴 Poor |
+| CPU Efficiency | 0.00% | 🔴 Poor |
 | GC Overhead | 0.00% | ✅ Good |
 | Shuffle Efficiency | 0.000 | 🔴 Poor |
-| Memory Spilled | 1.49 GB | 🔴 High |
+| Memory Spilled | 0.00 B | ✅ None |
 
 ## 🔍 Identified Bottlenecks (1)
 
 ### 1. 🟠 CPU Underutilization / CPU Underutilization
 
 **Severity:** HIGH  
-**Confidence:** 80%  
+**Confidence:** 78%  
 **Type:** CPU  
-**Impact:** CPUs are 64.2% idle, indicating inefficient resource utilization  
+**Impact:** CPUs are 100.0% idle, indicating inefficient resource utilization  
 
 **Analysis:**  
-Probable Cause: CPU underutilization with 64.2% CPU idle time. Supporting Evidence: CPU efficiency is 35.8%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient parallelism.
+Probable Cause: CPU underutilization with 100.0% CPU idle time. Supporting Evidence: CPU efficiency is 0.0%. Low CPU utilization without I/O pressure suggests serialization overhead or insufficient parallelism.
 
 **Evidence:**
-- `cpu_efficiency`: 0.35833333333333334
-- `cpu_utilization_percentage`: 35.83%
-- `cpu_wait_percentage`: 64.17%
+- `cpu_efficiency`: 0.0
+- `cpu_utilization_percentage`: 0.00%
+- `cpu_wait_percentage`: 0.00%
 - `shuffle_ratio`: 0.0
-- `deserialize_overhead_percentage`: 9.166666666666666
+- `deserialize_overhead_percentage`: 0.0
 
 ## ✅ Recommended Actions
-
-## ⚠️ Failure Analysis
-
-- **Stage Failures:** 1
-- **Task Failures:** 0
-- **Executor Failures:** 0
-- **OOM Events:** 0
-- **Fetch Failures:** 0
 
 ---
 

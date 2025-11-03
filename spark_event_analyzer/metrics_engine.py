@@ -141,7 +141,7 @@ class MetricsEngine:
             stage_attempt = stage_info.get('Stage Attempt ID', 0)
             
             # Get tasks for this stage
-            stage_tasks = task_df[task_df.get('Stage ID', -1) == stage_id]
+            stage_tasks = task_df[task_df['Stage ID'] == stage_id]
             
             # Check for failures
             failure_reason = stage_info.get('Failure Reason')

@@ -14,16 +14,16 @@ Probable Cause Chain:
         • recommendation: Check application logs and Spark UI
 
 Correlated Metrics at Failure:
-  • GC Overhead %: 4.0%
+  • GC Overhead %: 0.0%
   • Task Skew Ratio: 0.00
   • Memory Spilled: 1.00 GB
-  • Shuffle Read: 0 B
+  • Shuffle Read: 100.00 MB
   • Total Duration: 10.0s
   • Task Count: 1
   • Mean Task Duration: 10000ms
   • Max Task Duration: 10000ms
-  • GC vs Duration Correlation: 1.000
-  • Spill vs GC Correlation: 1.000
+  • GC vs Duration Correlation: 0.000
+  • Spill vs GC Correlation: 0.000
 
 Chain Confidence: 95%
 
